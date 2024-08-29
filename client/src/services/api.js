@@ -7,10 +7,10 @@ export const authEndpoints = {
 }
 
 export const summaryEndpoints = {
-    GET_SUMMARY: BASE_URL + "/summary",
+    GET_SUMMARY: BASE_URL + "/summary/summary",
 }
 
 export const bailoutEndpoints = {
-    SEND_BAILOUT: BASE_URL + "/bailout",
-    GET_BAILOUT_STATUS: BASE_URL + "/bailout-status",
+    SEND_BAILOUT: BASE_URL + "/bailout/bailout",
+    GET_BAILOUT_STATUS: BASE_URL + "/bailout/bailout-status",
 }

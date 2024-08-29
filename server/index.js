@@ -5,6 +5,9 @@ require('events').EventEmitter.defaultMaxListeners = 0
 
 //importing routes here
 const userRoutes=require("./routes/User");
+const bailoutRoutes=require("./routes/Bailout");
+const summaryRoutes=require("./routes/Summary");
+
 //connection for databse
 const database=require("./configs/database");
 const cookieParser=require("cookie-parser");
@@ -47,6 +50,8 @@ app.use(
 
 //mount routes here
 app.use('/api/v1/auth',userRoutes);
+app.use('/api/v1/bailout',bailoutRoutes);
+app.use('/api/v1/summary',summaryRoutes);
 
 //default route
 app.get("/",(req,res)=>{
