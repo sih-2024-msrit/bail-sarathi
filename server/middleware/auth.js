@@ -47,7 +47,7 @@ exports.auth=async(req,res,next)=>{
 
 exports.isLawyer=async(req,res,next)=>{
     try{
-        if(req.user.accountType!=="Student"){
+        if(req.user.accountType!=="lawyer"){
             return res.status(401).json({
                 success:false,
                 message:"This is a protected route for Lawyer only"
@@ -65,7 +65,7 @@ exports.isLawyer=async(req,res,next)=>{
 
 exports.isUser=async(req,res,next)=>{
     try{
-        if(req.user.accountType!=="Student"){
+        if(req.user.accountType!=="user"){
             return res.status(401).json({
                 success:false,
                 message:"This is a protected route for user only"
@@ -81,13 +81,13 @@ exports.isUser=async(req,res,next)=>{
     }
 }
 
-//isAdmin
-exports.isAdmin=async(req,res,next)=>{
+//isJudge
+exports.isJudge=async(req,res,next)=>{
     try{
-      if(req.user.accountType!=="Admin"){
+      if(req.user.accountType!=="judge"){
         return res.status(401).json({
           success:false,
-          message:"This is a protected route for Admin only"
+          message:"This is a protected route for judge only"
         });
       }
       next();

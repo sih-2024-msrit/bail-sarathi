@@ -5,7 +5,7 @@ const UserSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
-    username:{
+    license:{
         type:String,
         required:true,
     },
@@ -21,7 +21,7 @@ const UserSchema=new mongoose.Schema({
     gender:{
         type:String,
         required:true,
-        enum:['Male','Female','Other'],
+        enum:['male','female','other'],
     },
     email:{
         type:String,
@@ -29,8 +29,8 @@ const UserSchema=new mongoose.Schema({
     },
     accountType:{
         type:String,
-        enum:['Admin','User', 'Lawyer'],
-        default:'User'
+        enum:['judge','lawyer'],
+        default:'lawyer'
     },
     token:{
         type:String

@@ -1,5 +1,5 @@
 import {createSlice} from "@reduxjs/toolkit"
-import { bailout } from "../services/operations/BailAPI"
+// import { bailout } from "../services/operations/BailAPI"
 
 const initialState={
     summary:localStorage.getItem("summary") ? localStorage.getItem("summary"):null,
@@ -24,6 +24,6 @@ const summarySlice = createSlice({
     }
 })
 
-export const {setSummary, setLoading, setBailout}=authSlice.actions
+export const {setSummary, setLoading, setBailout}=summarySlice.actions
 
 export default summarySlice.reducer;
