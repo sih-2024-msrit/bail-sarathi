@@ -1,7 +1,7 @@
 const express=require("express");
 const app=express();
 require('events').EventEmitter.defaultMaxListeners = 0
-
+const fileUpload = require('express-fileupload');
 
 //importing routes here
 const userRoutes=require("./routes/User");
@@ -9,7 +9,7 @@ const bailoutRoutes=require("./routes/Bailout");
 const summaryRoutes=require("./routes/Summary");
 
 //connection for databse
-const database=require("./configs/database");
+const database=require("./config/database");
 const cookieParser=require("cookie-parser");
 const cors=require("cors");
 const dotenv=require("dotenv");
