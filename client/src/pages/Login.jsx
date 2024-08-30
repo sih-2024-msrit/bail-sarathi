@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import {useDispatch} from "react-redux"
 import { setToken } from '../slices/authSlice';
 import { setUser } from '../slices/userSlice';
-import image from '../assets/dummy.png'
+import image from '../assets/bail_woman.PNG'
 import { IoEyeOffSharp ,IoEyeSharp } from "react-icons/io5";
 
 const {LOGIN_API} =authEndpoints;
@@ -81,7 +81,7 @@ const Login = () => {
       </div>
 
       <div>
-        <img src={image} alt="image" className='w-[100vh] h-[100vh]'/>
+        <img src={image} alt="image" className='w-max h-[100vh]'/>
       </div>
 
     </div>
