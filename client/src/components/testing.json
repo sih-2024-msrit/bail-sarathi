@@ -1,0 +1,137 @@
+[
+    {
+        "applicationNumber": "123D-4535-4465-7456",
+        "date": "01/01/2024",
+        "ipcSection": "Section 420",
+        "previousCase": "No",
+        "criminalRecord": "Yes",
+        "document": "View",
+        "status": "Open"
+    },
+    {
+        "applicationNumber": "123D-6123-4567-8934",
+        "date": "02/01/2024",
+        "ipcSection": "Section 376",
+        "previousCase": "Yes",
+        "criminalRecord": "No",
+        "document": "View",
+        "status": "Closed"
+    },
+    {
+        "applicationNumber": "0000-0000-1234-7000",
+        "date": "03/01/2024",
+        "ipcSection": "Section 302",
+        "previousCase": "No",
+        "criminalRecord": "Yes",
+        "document": "View",
+        "status": "Pending"
+    },
+    {
+        "applicationNumber": "0000-0000-1234-8000",
+        "date": "04/01/2024",
+        "ipcSection": "Section 144",
+        "previousCase": "Yes",
+        "criminalRecord": "No",
+        "document": "View",
+        "status": "Open"
+    },
+    {
+        "applicationNumber": "0000-0000-1234-9000",
+        "date": "05/01/2024",
+        "ipcSection": "Section 377",
+        "previousCase": "No",
+        "criminalRecord": "Yes",
+        "document": "View",
+        "status": "Closed"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-0000",
+        "date": "06/01/2024",
+        "ipcSection": "Section 498A",
+        "previousCase": "Yes",
+        "criminalRecord": "No",
+        "document": "View",
+        "status": "Pending"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-1000",
+        "date": "07/01/2024",
+        "ipcSection": "Section 406",
+        "previousCase": "No",
+        "criminalRecord": "Yes",
+        "document": "View",
+        "status": "Open"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-2000",
+        "date": "08/01/2024",
+        "ipcSection": "Section 34",
+        "previousCase": "Yes",
+        "criminalRecord": "No",
+        "document": "View",
+        "status": "Closed"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-3000",
+        "date": "09/01/2024",
+        "ipcSection": "Section 302",
+        "previousCase": "No",
+        "criminalRecord": "Yes",
+        "document": "View",
+        "status": "Pending"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-4000",
+        "date": "10/01/2024",
+        "ipcSection": "Section 509",
+        "previousCase": "Yes",
+        "criminalRecord": "No",
+        "document": "View",
+        "status": "Open"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-5000",
+        "date": "11/01/2024",
+        "ipcSection": "Section 420",
+        "previousCase": "No",
+        "criminalRecord": "Yes",
+        "document": "View",
+        "status": "Closed"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-6000",
+        "date": "12/01/2024",
+        "ipcSection": "Section 376",
+        "previousCase": "Yes",
+        "criminalRecord": "No",
+        "document": "View",
+        "status": "Pending"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-7000",
+        "date": "13/01/2024",
+        "ipcSection": "Section 302",
+        "previousCase": "No",
+        "criminalRecord": "Yes",
+        "document": "View",
+        "status": "Open"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-8000",
+        "date": "14/01/2024",
+        "ipcSection": "Section 144",
+        "previousCase": "Yes",
+        "criminalRecord": "No",
+        "document": "View",
+        "status": "Closed"
+    },
+    {
+        "applicationNumber": "0000-0000-1235-9000",
+        "date": "15/01/2024",
+        "ipcSection": "Section 377",
+        "previousCase": "No",
+        "criminalRecord": "Yes",
+        "document": "View",
+        "status": "Pending"
+    }
+]
