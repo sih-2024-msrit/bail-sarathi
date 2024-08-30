@@ -1,5 +1,5 @@
 const Summary = require('../models/summary');
-
+const axios=require('axios')
 exports.getSummary = async (req, res) => {
     try {
         const location = req.body.location;
