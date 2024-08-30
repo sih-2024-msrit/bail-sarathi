@@ -5,6 +5,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login"
 import ApplicationStatus from "./pages/ApplicationStatus";
+import BailApply from "./pages/BailApply";
 function App() {
   return (
     <div className="bg-slategray min-h-screen">
@@ -15,6 +16,7 @@ function App() {
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/" element={<Login/>}/>
         <Route path="/application" element={ApplicationStatus}/>
+        <Route path="/apply-bail" element={<BailApply/>}/>
       </Routes>
     
     </div>
