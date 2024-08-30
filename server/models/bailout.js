@@ -1,19 +1,19 @@
 const mongoose=require("mongoose");
 
 const BailoutSchema=new mongoose.Schema({
-    caseNo:{
+    applicationNo:{
         type:String,
         required:true,
     },
-    name:{
+    jurisdiction:{
         type:String,
         required:true,
     },
-    location:{
+    caseDetails:{
         type:String,
         required:true,
     },
-    status:{
+    application:{
         type:String,
         required:true,
         default:"Pending"
