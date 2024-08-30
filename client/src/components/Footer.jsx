@@ -1,6 +1,5 @@
 import React from 'react'
 import dummy from '../assets/dummy.png'
-import { IoLogoInstagram, IoLogoTwitter, IoLogoFacebook, IoLogoLinkedin } from "react-icons/io";
 
 
 const Footer = () => {
@@ -9,12 +8,6 @@ const Footer = () => {
         <div className='flex flex-row gap-5 mb-8'>
             <img src={dummy} alt="logo" className='w-10 h-10'/>
             <p className='text-white text-xl my-auto'>Bail Sarathi</p>
-        </div>
-        <div className='flex flex-row gap-2'>
-            <IoLogoFacebook/>
-            <IoLogoInstagram/>
-            <IoLogoTwitter/>
-            <IoLogoLinkedin/>
         </div>
         <div className='flex flex-row gap-4'>
             <p>Term of use</p>

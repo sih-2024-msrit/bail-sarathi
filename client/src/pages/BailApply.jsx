@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast';
 import { apiConnector } from '../services/apiConnector';
 import { bailoutEndpoints } from '../services/api';
+import Footer from '../components/Footer';
+import Navbar from '../components/Navbar';
+
+
 const {BAIL_APPLY_API}=bailoutEndpoints;
 const BailApply = () => {
   const [data,setData]=useState({
@@ -49,25 +53,40 @@ const BailApply = () => {
     toast.dismiss(toastId)
   };
   return (
-    <div className='bg-white px-16 '>
-        <h1>Apply For bail</h1>
-        <form onSubmit={handleSubmit} className='flex flex-col gap-10'>
-            <label htmlFor="applicationNo">Application Number:</label>
-            <input onChange={handleChange} className="border border-black rounded-md" type="text" id='applicationNo' name='applicationNo' />
+    <div>
+        <Navbar/>
+        <div className='px-16'>
+            <p className='text-3xl'>Enter your case details</p>
+            <form onSubmit={handleSubmit} className='flex flex-col gap-10'>
+            <div className='flex flex-row gap-12 mt-12'>
+                <div className='bg-white w-[300px] rounded-md py-2 px-4'>
+                    <label htmlFor="applicationNo" className='border-none text-xs text-gray-500 flex flex-col text-grey bg-transparent'>Application Number:</label>
+                    <input onChange={handleChange} className="relative w-max border-none focus:outline-none bg-transparent rounded-md" type="text" id='applicationNo' name='applicationNo' />
+                </div>
+                <div className='bg-white w-[300px] rounded-md py-2 px-4'>
+                    <label htmlFor="jurisdiction" className='border-none text-xs text-gray-500 flex flex-col text-grey bg-transparent'>Jurisdiction:</label>
+                    <input onChange={handleChange} className="border-none focus:outline-none  bg-transparent rounded-md" type="text" id='jurisdiction' name='jurisdiction' />
+                </div>
+                </div>
 
-            <label htmlFor="jurisdiction">Jurisdiction:</label>
-            <input onChange={handleChange} className="border border-black rounded-md" type="text" id='jurisdiction' name='jurisdiction' />
+                <div className='max-w-2xl'>
+                    <label htmlFor="caseDetails" class="border-none text-xs text-gray-500 flex flex-col bg-transparent">Upload CaseDetails:</label>
+                    <input  onChange={handleChange} type="file"         name="caseDetails" id="caseDetails" 
+                        class="w-full text-gray-400 mt-2 font-semibold text-sm bg-white border file:cursor-pointer cursor-pointer file:border-0 file:py-3 file:px-4 file:mr-4 file:bg-gray-100 file:hover:bg-gray-200 file:text-gray-500 rounded" />
+                    <p class="text-xs text-gray-400 mt-2">PDF is Allowed.</p>
+                </div>
+           
+                <div className="max-w-2xl">
+                    <label class="border-none text-xs text-gray-500 flex flex-col bg-transparent">Upload file</label>
+                    <input  onChange={handleChange} type="file"         name="application" id="application" 
+                        class="w-full text-gray-400 mt-2 font-semibold text-sm bg-white border file:cursor-pointer cursor-pointer file:border-0 file:py-3 file:px-4 file:mr-4 file:bg-gray-100 file:hover:bg-gray-200 file:text-gray-500 rounded" />
+                    <p class="text-xs text-gray-400 mt-2">PDF is Allowed.</p>
+                </div>
 
-            <label htmlFor="caseDetails">Upload CaseDetails:</label>
-            <input onChange={handleChange} type="file" name="caseDetails" id="caseDetails" />
-
-            <label htmlFor="application">Upload Application:</label>
-            <input onChange={handleChange} type="file" name="application" id="application" />
-
-            <button type='submit' className='border border-black rounded-md hover:cursor-pointer hover:text-white hover:bg-black'>
-                Submit
-            </button>
+                <button className="hover:cursor-pointer bg-[#1E2E45] text-white py-2 px-5 w-max hover:bg-[#33527e]" type='submit'>Submit</button>
         </form>
+        </div>
+        <Footer/>
     </div>
   )
 }
