@@ -4,6 +4,8 @@ import Footer from '../components/Footer';
 import { bailSummary } from '../services/operations/bailAPI';
 import { useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import ReactMarkdown from "react-markdown";
+import toast from 'react-hot-toast';
 
 const BailSummary = () => {
   const dispatch = useDispatch();
@@ -53,6 +55,7 @@ const BailSummary = () => {
   ];
 
   const handleGenerate = async (index) => {
+    setTopic(index);
     if (!descriptions[index]) {
       try {
         const formData = { flag: shortform[index], applicationNo: applicationNo };
@@ -73,7 +76,7 @@ const BailSummary = () => {
         console.error('Error fetching data:', error);
       }
     }
-    setTopic(index);
+  
     console.log('Generate button clicked for topic:', topics[index]);
   };
 
@@ -95,10 +98,23 @@ const BailSummary = () => {
           </div>
           <div className='text-lg mt-4'>            
             {
-              (topic===2 || topic===3 )?(
-                descriptions[topic]===null?("calling data..."):(JSON.stringify(descriptions[topic]))
+              (topic===2)?(
+                descriptions[topic]===null?("generating..."):(Object.entries(descriptions[topic]).map(([key,value],index)=>(
+                  <li>
+                    {key}:{value.join(", ")}
+                  </li>
+                )))
               ):(
-                descriptions[topic]
+                topic==3?
+                (
+                  descriptions[topic]===null?("generating..."):(JSON.parse(descriptions[topic])?.map((item)=>(
+                    <li>{item?.toString()}</li>
+                  )))
+                )
+                
+                :(<ReactMarkdown>{descriptions[topic]?.toString().length===0?("Generating...."):(descriptions[topic]?.toString())}</ReactMarkdown>)
+    
+              
               )
             }
           </div>

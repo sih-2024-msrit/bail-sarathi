@@ -21,11 +21,20 @@ from scripts.previousCases.summarizationPrompting import *
 
 from config import ai
 
+
+
 # Add the parent directory to the sys.path
 parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
+from langchain.document_loaders import PyPDFLoader
+
+def pdf_to_text(pdf):
+  loader = PyPDFLoader(pdf)
+  pages = loader.load()
+  text_content = [page.page_content for page in pages]
+  return "\n".join(text_content)
 
 app = Flask(__name__)
 
