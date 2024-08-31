@@ -11,8 +11,8 @@ const BailApply = () => {
   const [data,setData]=useState({
     applicationNo:"",
     jurisdiction:"",
-    caseDetails:null,
-    application:null,
+    caseDetails:"",
+    application:"",
   })
   const handleChange=(e)=>{
     if(e.target.type==='file'){
@@ -71,16 +71,16 @@ const BailApply = () => {
 
                 <div className='max-w-2xl'>
                     <label htmlFor="caseDetails" class="border-none text-xs text-gray-500 flex flex-col bg-transparent">Upload CaseDetails:</label>
-                    <input  onChange={handleChange} type="file"         name="caseDetails" id="caseDetails" 
+                    <textarea  onChange={handleChange} className='h-16 w-full'        name="caseDetails" id="caseDetails" 
                         class="w-full text-gray-400 mt-2 font-semibold text-sm bg-white border file:cursor-pointer cursor-pointer file:border-0 file:py-3 file:px-4 file:mr-4 file:bg-gray-100 file:hover:bg-gray-200 file:text-gray-500 rounded" />
-                    <p class="text-xs text-gray-400 mt-2">PDF is Allowed.</p>
+                    {/* <p class="text-xs text-gray-400 mt-2">PDF is Allowed.</p> */}
                 </div>
            
                 <div className="max-w-2xl">
                     <label class="border-none text-xs text-gray-500 flex flex-col bg-transparent">Upload file</label>
-                    <input  onChange={handleChange} type="file"         name="application" id="application" 
+                    <textarea  onChange={handleChange}   className='h-16 w-full'       name="application" id="application" 
                         class="w-full text-gray-400 mt-2 font-semibold text-sm bg-white border file:cursor-pointer cursor-pointer file:border-0 file:py-3 file:px-4 file:mr-4 file:bg-gray-100 file:hover:bg-gray-200 file:text-gray-500 rounded" />
-                    <p class="text-xs text-gray-400 mt-2">PDF is Allowed.</p>
+                    {/* <p class="text-xs text-gray-400 mt-2">PDF is Allowed.</p> */}
                 </div>
 
                 <button className="hover:cursor-pointer bg-[#1E2E45] text-white py-2 px-5 w-max hover:bg-[#33527e]" type='submit'>Submit</button>
