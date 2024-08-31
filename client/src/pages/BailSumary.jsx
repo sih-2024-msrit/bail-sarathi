@@ -8,29 +8,42 @@ import { useDispatch } from 'react-redux';
 const BailSummary = () => {
   const dispatch = useDispatch();
   const topics = ['Bail Summary', 'Previous Cases', 'IPC Section', 'Criminal Record'];
+  const newTopics=[   
+    'bailSummary',
+    'previousCases',
+    'ipcSection',
+    ,'criminalRecord'];
   const shortform = ['bs', 'pc', 'is', 'cr'];
   const [topic, setTopic] = useState(0);
-  const { applicationNumber } = useParams();
+  const { applicationNo } = useParams();
+  const [data, setData] = useState({
+    bailSummary: "",
+    previousCases: "",
+    ipcSection:  null,
+    criminalRecord: null
+  });
+
 
   useEffect(() => {
     const fetchBailSummary = async () => {
       try {
-        const formData = { shortform: 'bs', applicationNumber };
+        const formData = { flag: 'bs', applicationNo };
         const response = await dispatch(bailSummary(formData));
-        console.log(response);
+        console.log("RESPONSE:",response);
+        setData(prevData => ({
+          ...prevData,
+          bailSummary:response
+        }));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
     fetchBailSummary();
-  }, [dispatch, applicationNumber]);
+  }, []);
 
-  const [data, setData] = useState({
-    bailSummary: "",
-    previousCases: "",
-    ipcSection: "",
-    criminalRecord: ""
-  });
+  console.log("RESPONSE IN BODY:",data);
+
+
 
   const descriptions = [
     data.bailSummary,
@@ -42,12 +55,20 @@ const BailSummary = () => {
   const handleGenerate = async (index) => {
     if (!descriptions[index]) {
       try {
-        const formData = { flag: shortform[index], applicationNo: applicationNumber };
+        const formData = { flag: shortform[index], applicationNo: applicationNo };
         const response = await dispatch(bailSummary(formData));
+        if(shortform[index]==='cr'){
+          setData(prevData => ({
+            ...prevData,
+            'criminalRecord':response
+          }));
+        }
+        else{
         setData(prevData => ({
           ...prevData,
-          ...response
+          [newTopics[index]]:response
         }));
+      }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
@@ -60,7 +81,7 @@ const BailSummary = () => {
     <div className='min-h-screen flex flex-col'>
       <Navbar />
       <div className='flex-1 text-black p-4'>
-        <div className='gap-y-5 w-[60%] h-[400px] border border-black p-4 mx-auto'>
+        <div className='gap-y-5 w-[60%] h-fit border border-black p-4 mx-auto'>
           <div className='flex flex-row gap-4 justify-items-start mb-4'>
             {topics.map((top, index) => (
               <button
@@ -72,8 +93,14 @@ const BailSummary = () => {
               </button>
             ))}
           </div>
-          <div className='text-lg mt-4'>
-            {descriptions[topic]}
+          <div className='text-lg mt-4'>            
+            {
+              (topic===2 || topic===3 )?(
+                descriptions[topic]===null?("calling data..."):(JSON.stringify(descriptions[topic]))
+              ):(
+                descriptions[topic]
+              )
+            }
           </div>
         </div>
       </div>

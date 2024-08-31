@@ -14,7 +14,7 @@ function App() {
   
       <Routes>
         <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/:applicationNumber" element={<BailSumary />} />
+        <Route path="/admin/:applicationNo" element={<BailSumary />} />
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/" element={<Login/>}/>
         <Route path="/application" element={ApplicationStatus}/>

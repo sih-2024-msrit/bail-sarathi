@@ -79,24 +79,26 @@ exports.bailSummary=async(req,res)=>{
     try{
         const {applicationNo,flag}=req.body;
         //flag-> bs,pc,
+        console.log("REQUEST BODY:",req.body)
         if(!applicationNo || !flag){
             return res.status(400).json({
                 success:false,
                 message:"all fields are required"
             })
         }
-
+        console.log("BAIL SUMMARY ENTRY")
         const bailDetails=await Bailout.findOne({
             applicationNo:applicationNo
         });
 
+        console.log("BAIL SUMMARY SEARCH")
         if(!bailDetails){
             return res.status(404).json({
                 success:false,
                 message:"The bail application couldnt be found"
             })
         }
-
+        console.log("BAIL SUMMARY SEARCH SUCCESSFUL")
         let response='';
 
         if(flag==='bs'){
@@ -107,6 +109,8 @@ exports.bailSummary=async(req,res)=>{
                     message:"python flask error for backend"
                 })
             }
+            console.log("RESPONSE HERE:",response)
+            console.log("BAIL SUMMARY EXTRACTED")
         }
         else if(flag==='pc'){
             response=await axios.post("http://localhost:5000/previous-cases",{application:bailDetails.caseDetails});
@@ -116,6 +120,7 @@ exports.bailSummary=async(req,res)=>{
                     message:"python flask error for backend"
                 })
             }
+            console.log("PREVIOUS CASES DONE")
         }
         else if(flag==='is'){
             response=await axios.post("http://localhost:5000/ipc-sections",{application:bailDetails.caseDetails});
@@ -125,6 +130,7 @@ exports.bailSummary=async(req,res)=>{
                     message:"python flask error for backend"
                 })
             }
+            console.log("IPC SECTIONS DONE")
         }
         else if(flag==='cr'){
             response=await axios.post("http://localhost:5000/criminal-records",{application:bailDetails.caseDetails});
@@ -134,12 +140,14 @@ exports.bailSummary=async(req,res)=>{
                     message:"python flask error for backend"
                 })
             }
+            console.log("CRIMINAL CASES DONE")
         }
 
+        console.log("EVERYTHING DONE")
         return res.status(200).json({
             success:true,
             message:"generated successfully",
-            summary:response?.data?.output
+            summary:response?.data
         })
     }
     catch(err){

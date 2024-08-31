@@ -8,7 +8,13 @@ const Admin = () => {
   const itemsPerPage = 8;  
 
   const navigate = useNavigate();
-
+  function formatDate(date) {
+    const d = new Date(date);
+    const day = String(d.getDate()).padStart(2, '0');
+    const month = String(d.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const year = String(d.getFullYear()).slice(-2);
+    return `${day}-${month}-${year}`;
+  }
   const [itemOffset, setItemOffset] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredData, setFilteredData] = useState(data);
@@ -17,7 +23,7 @@ const Admin = () => {
     
     const timeoutId = setTimeout(() => {
       const filteredResults = data.filter(item =>
-        item.applicationNumber.toLowerCase().includes(searchQuery.toLowerCase())
+        item.applicationNo.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredData(filteredResults);
       setItemOffset(0); 
@@ -78,11 +84,9 @@ const Admin = () => {
             {currentItems.length > 0 ? (
               currentItems.map((item, index) => (
                 <tr key={index} className='text-center border-b-2 border-gray-400'>
-                  <td className='py-2' onClick={() => (navigate(item.applicationNumber))}>{item.applicationNumber}</td>
-                  <td className='py-2'>{item.date}</td>
-                  <td className='py-2'>{item.ipcSection}</td>
-                  <td className='py-2'>{item.previousCase}</td>
-                  <td className='py-2'>{item.criminalRecord}</td>
+                  <td className='py-2' onClick={() => (navigate(item.applicationNo))}>{item.applicationNo}</td>
+                  <td className='py-2'>{formatDate(Date.now())}</td>
+                  <td className='py-2'>{item.jurisdiction}</td>
                   <td className='py-2 text-blue-600 underline'><a href={item.document}>view</a></td>
                   <td className='py-2 text-green-500'>{item.status}</td>
                 </tr>

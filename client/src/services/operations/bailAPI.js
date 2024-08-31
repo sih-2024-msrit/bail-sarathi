@@ -61,7 +61,7 @@ export function getBailoutStatus(token, navigate) {
 
 export function bailSummary(data) {
     return async (dispatch) => {
-        const toastId = toast.loading("Loading...")
+  
         try {
             const response = await apiConnector("POST", BAIL_SUMMARY_API, data,
                 {
@@ -73,11 +73,12 @@ export function bailSummary(data) {
             if (!response.data.success) {
                 throw new Error(response.data.message)
             }
-            toast.success("Bail Summary Successful Fetched")
+        
+            return response?.data?.summary;
         } catch (error) {
             console.log("BAILOUT SUMMARY API ERROR............", error)
             toast.error(`Bail Summary Failed ${error.message}`)
         }
-        toast.dismiss(toastId)
+   
     }
 }
