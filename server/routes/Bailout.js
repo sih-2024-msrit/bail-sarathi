@@ -1,6 +1,6 @@
 const { Router } = require("express");
 // const { Makebailout, bailoutStatus } = require("../controllers/bailout");
-const {createApplication}=require('../controllers/bailout')
+const {createApplication,testFlask}=require('../controllers/bailout')
 const router = Router();
 
 // for judge
@@ -9,5 +9,5 @@ const router = Router();
 // router.route("/bailout-status").get(bailoutStatus);
 
 router.route("/bail-apply").post(createApplication);
-
+router.route("/test-flask").post(testFlask);
 module.exports = router;

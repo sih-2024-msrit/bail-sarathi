@@ -5,7 +5,8 @@ from langchain.embeddings import HuggingFaceEmbeddings
 import torch
 from langchain.prompts import PromptTemplate
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
-from langchain.vectorstores import Chroma
+from langchain_chroma import Chroma
+
 
 def saved_vectorDB_loading(save_directory = "/content/drive/MyDrive/Bail_Saarathi/vector_database/IPC_Sections_VectorEmbeddings/"):
   device = "cuda" if torch.cuda.is_available() else "cpu"

@@ -1,9 +1,17 @@
 # IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
+import sys
+import os
+
+
+server_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+if server_dir not in sys.path:
+    sys.path.append(server_dir)
 
 
 from langchain.memory import ConversationBufferMemory
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import HumanMessage
+from scripts.ipc.ipcmap.ipctemplate import *
 # import json
 
 def map_IPC_sections(crimes_list, vectorDB):

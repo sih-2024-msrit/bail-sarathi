@@ -74,3 +74,30 @@ exports.createApplication = async (req, res) => {
         });
     }
 }
+
+
+exports.testFlask=async(req,res)=>{
+    try{
+        console.log("flask test entry")
+        const response=await axios.post("http://localhost:5000/test-llm",{input:req.body.input})
+        console.log("flask test api ok")
+        if(!response){
+            return res.status(400).json({
+                success:false,
+                message:"came in express but flask dropped"
+            })
+        }   
+        console.log("flask test api response ok",response?.data?.output)
+        return res.status(200).json({
+            success:true,
+            message:"done it",
+        })
+    }
+    catch(err){
+        console.log("error while testing flask",err);
+        return res.status(500).json({
+            success:false,
+            message:"flask error api "
+        })
+    }
+}

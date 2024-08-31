@@ -2,14 +2,14 @@ import os
 import google.generativeai as genai
 import sys
 from dotenv import load_dotenv, find_dotenv
-_ = load_dotenv(find_dotenv()) # read local .env file
-sys.path.append('../..')
 
-# Retrieve and set the Google Generative AI API key from the environment variables
-api_key = os.getenv('GEMINI_API_KEY')
+# Load environment variables from a .env file
+load_dotenv(find_dotenv())
+
+# Retrieve and set the Google Generative AI API key from environment variables
+api_key = os.getenv('GOOGLE_API_KEY')  # Use GOOGLE_API_KEY to match the expected name
 if api_key is None:
-    raise ValueError("Environment variable 'GEMINI_API_KEY' is not set.")
-os.environ['GOOGLE_API_KEY'] = api_key
+    raise ValueError("Environment variable 'GOOGLE_API_KEY' is not set.")
 
 # Configure the API key for the Google Generative AI library
 genai.configure(api_key=api_key)
@@ -18,7 +18,3 @@ genai.configure(api_key=api_key)
 hf_token = os.getenv('HF_TOKEN')
 if hf_token is None:
     raise ValueError("Environment variable 'HF_TOKEN' is not set.")
-os.environ['HF_TOKEN'] = hf_token
-inference_api_key = hf_token
-
-# Now you can use inference_api_key for Hugging Face API requests.
