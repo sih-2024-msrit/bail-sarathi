@@ -6,8 +6,8 @@ const axios=require('axios')
 
 exports.createApplication = async (req, res) => {
     try {
-        const { applicationNo, jurisdiction } = req.body;
-        const { application, caseDetails } = req.files;
+        const { applicationNo, jurisdiction,application,caseDetails } = req.body;
+        // const { application, caseDetails } = req.files;
 
         if (!applicationNo || !jurisdiction || !application || !caseDetails) {
             return res.status(400).json({
@@ -17,47 +17,47 @@ exports.createApplication = async (req, res) => {
         }
 
         // Function to upload file to Firebase
-        const uploadToFirebase = (file, prefix) => {
-            return new Promise((resolve, reject) => {
-                const fileName = `${prefix}/${Date.now()}-${file.name}`;
-                const fileUpload = bucket.file(fileName);
-                const blobStream = fileUpload.createWriteStream({
-                    metadata: {
-                        contentType: file.mimetype
-                    }
-                });
+        // const uploadToFirebase = (file, prefix) => {
+        //     return new Promise((resolve, reject) => {
+        //         const fileName = `${prefix}/${Date.now()}-${file.name}`;
+        //         const fileUpload = bucket.file(fileName);
+        //         const blobStream = fileUpload.createWriteStream({
+        //             metadata: {
+        //                 contentType: file.mimetype
+        //             }
+        //         });
 
-                blobStream.on('error', (error) => {
-                    reject(error);
-                });
+        //         blobStream.on('error', (error) => {
+        //             reject(error);
+        //         });
 
-                blobStream.on('finish', async () => {
-                    try {
-                        await fileUpload.makePublic();
-                        const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-                        resolve(url);
-                    } catch (error) {
-                        reject(error);
-                    }
-                });
+        //         blobStream.on('finish', async () => {
+        //             try {
+        //                 await fileUpload.makePublic();
+        //                 const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+        //                 resolve(url);
+        //             } catch (error) {
+        //                 reject(error);
+        //             }
+        //         });
 
-                // Read the file from the temporary directory and upload
-                fs.createReadStream(file.tempFilePath).pipe(blobStream);
-            });
-        };
+        //         // Read the file from the temporary directory and upload
+        //         fs.createReadStream(file.tempFilePath).pipe(blobStream);
+        //     });
+        // };
 
-        // Upload both files
-        const [applicationPdfUrl, caseDetailsPdfUrl] = await Promise.all([
-            uploadToFirebase(application, 'applications'),
-            uploadToFirebase(caseDetails, 'caseDetails')
-        ]);
+        // // Upload both files
+        // const [applicationPdfUrl, caseDetailsPdfUrl] = await Promise.all([
+        //     uploadToFirebase(application, 'applications'),
+        //     uploadToFirebase(caseDetails, 'caseDetails')
+        // ]);
 
         // Create Bailout document
         const bailApply = await Bailout.create({
             applicationNo,
             jurisdiction,
-            caseDetails: caseDetailsPdfUrl,
-            application: applicationPdfUrl,
+            caseDetails,
+            application ,
         });
 
         return res.status(200).json({
@@ -74,6 +74,82 @@ exports.createApplication = async (req, res) => {
         });
     }
 }
+
+exports.bailSummary=async(req,res)=>{
+    try{
+        const {applicationNo,flag}=req.body;
+        //flag-> bs,pc,
+        if(!applicationNo || !flag){
+            return res.status(400).json({
+                success:false,
+                message:"all fields are required"
+            })
+        }
+
+        const bailDetails=await Bailout.findOne({
+            applicationNo:applicationNo
+        });
+
+        if(!bailDetails){
+            return res.status(404).json({
+                success:false,
+                message:"The bail application couldnt be found"
+            })
+        }
+
+        let response='';
+
+        if(flag==='bs'){
+            response=await axios.post("http://localhost:5000/bail-summary",{applicationNo:bailDetails.applicationNo,application:bailDetails.application});
+            if(!response){
+                return res.status(404).json({
+                    success:false,
+                    message:"python flask error for backend"
+                })
+            }
+        }
+        else if(flag==='pc'){
+            response=await axios.post("http://localhost:5000/previous-cases",{application:bailDetails.caseDetails});
+            if(!response){
+                return res.status(404).json({
+                    success:false,
+                    message:"python flask error for backend"
+                })
+            }
+        }
+        else if(flag==='is'){
+            response=await axios.post("http://localhost:5000/ipc-sections",{application:bailDetails.caseDetails});
+            if(!response){
+                return res.status(404).json({
+                    success:false,
+                    message:"python flask error for backend"
+                })
+            }
+        }
+        else if(flag==='cr'){
+            response=await axios.post("http://localhost:5000/criminal-records",{application:bailDetails.caseDetails});
+            if(!response){
+                return res.status(404).json({
+                    success:false,
+                    message:"python flask error for backend"
+                })
+            }
+        }
+
+        return res.status(200).json({
+            success:true,
+            message:"generated successfully",
+            summary:response?.data?.output
+        })
+    }
+    catch(err){
+        console.log("Error while fetching summary",err)
+        return res.status(500).json({
+            success:false,
+            message:"Error while creating summary "
+        })
+    }
+} 
 
 
 exports.testFlask=async(req,res)=>{

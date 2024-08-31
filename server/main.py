@@ -47,5 +47,39 @@ def run_llm():
    print("OUTPUT:",output)
    return jsonify(output=output)
 
+
+@app.route("/bail-summary",methods=['POST'])
+def bail_summary():
+    application_data=request.json.get('application')
+    application_no=request.json.get('applicationNo')
+    output=Bail_Reckoner_Summary(application_data,application_no,application_no)
+    print("OUTPUT:",output)
+    return jsonify(output)
+#appli
+
+@app.route("/previous-cases",methods=['POST'])
+def previous_cases_fetch():
+    application_data=request.json.get('application')
+    output=Previous_Cases_With_Summary_Fetch(application_data,path_case_vector_store)
+    print("OUTPUT:",output)
+    return jsonify(output)
+#case
+
+@app.route("/ipc-sections",methods=['POST'])
+def ipc_sections_generator():
+    application_data=request.json.get('application')
+    output=IPC_Sections_Charged(application_data,path_ipc_vector_store)
+    print("OUTPUT:",output)
+    return jsonify(output)
+#cr
+
+@app.route("/criminal-records",methods=['POST'])
+def criminal_records_generator():
+    application_data=request.json.get('application')
+    output=crime_keywords_extraction(application_data)
+    print("OUTPUT:",output)
+    return jsonify(output)
+#cr
+
 if __name__ == '__main__':
     app.run(port=5000)
