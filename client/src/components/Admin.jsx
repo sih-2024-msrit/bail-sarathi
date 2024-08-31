@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { IoIosSearch } from "react-icons/io";
 import ReactPaginate from 'react-paginate';
 import data from "./testing.json";
+import { useNavigate, useParams } from 'react-router-dom';
 
 const Admin = () => {
-  const itemsPerPage = 8;
+  const itemsPerPage = 8;  
+
+  const navigate = useNavigate();
 
   const [itemOffset, setItemOffset] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
@@ -66,9 +69,7 @@ const Admin = () => {
             <tr className='text-center text-gray-500'>
               <th className='px-6 py-2 '>Application Number</th>
               <th className='px-6 py-2'>Date</th>
-              <th className='px-6 py-2'>IPC Section</th>
-              <th className='px-6 py-2'>Previous Case</th>
-              <th className='px-6 py-2'>Criminal Record</th>
+              <th className='px-6 py-2'>Jurisdiction</th>
               <th className='px-6 py-2'>Document</th>
               <th className='px-6 py-2'>Status</th>
             </tr>
@@ -77,12 +78,12 @@ const Admin = () => {
             {currentItems.length > 0 ? (
               currentItems.map((item, index) => (
                 <tr key={index} className='text-center border-b-2 border-gray-400'>
-                  <td className='py-2'>{item.applicationNumber}</td>
+                  <td className='py-2' onClick={() => (navigate(item.applicationNumber))}>{item.applicationNumber}</td>
                   <td className='py-2'>{item.date}</td>
                   <td className='py-2'>{item.ipcSection}</td>
                   <td className='py-2'>{item.previousCase}</td>
                   <td className='py-2'>{item.criminalRecord}</td>
-                  <td className='py-2 text-blue-600 underline'>{item.document}</td>
+                  <td className='py-2 text-blue-600 underline'><a href={item.document}>view</a></td>
                   <td className='py-2 text-green-500'>{item.status}</td>
                 </tr>
               ))

@@ -14,5 +14,6 @@ export const bailoutEndpoints = {
     SEND_BAILOUT: BASE_URL + "/bailout/bailout",
     GET_BAILOUT_STATUS: BASE_URL + "/bailout/bailout-status",
     BAIL_APPLY_API:BASE_URL+ "/bailout/bail-apply",
-    TEST_FLASK_API:BASE_URL + "/bailout/test-flask"
+    TEST_FLASK_API:BASE_URL + "/bailout/test-flask",
+    BAIL_SUMMARY_API:BASE_URL + "/bailout/bail-summary"
 }
