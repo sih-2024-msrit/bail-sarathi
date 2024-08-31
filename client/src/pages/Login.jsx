@@ -7,10 +7,12 @@ import { setToken } from '../slices/authSlice';
 import { setUser } from '../slices/userSlice';
 import image from '../assets/bail_woman.PNG'
 import { IoEyeOffSharp ,IoEyeSharp } from "react-icons/io5";
+import { useNavigate } from 'react-router-dom';
 
 const {LOGIN_API} =authEndpoints;
 const Login = () => {
    const dispatch=useDispatch();
+   const navigate=useNavigate();
    const [data,setData]=useState({
     license:"",
     password:""
@@ -34,7 +36,8 @@ const Login = () => {
       console.log("RESPONSE DATA",response?.data)
       setToken(response?.data?.token)
       setUser(response?.data?.user)
-      toast.success("JEET GYE ")
+      toast.success("You are logged in ")
+      navigate("/apply-bail")
     }
     catch(err){
       console.log(err);

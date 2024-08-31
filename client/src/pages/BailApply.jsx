@@ -77,7 +77,7 @@ const BailApply = () => {
                 </div>
            
                 <div className="max-w-2xl">
-                    <label class="border-none text-xs text-gray-500 flex flex-col bg-transparent">Upload file</label>
+                    <label class="border-none text-xs text-gray-500 flex flex-col bg-transparent">Upload Application</label>
                     <textarea  onChange={handleChange}   className='h-16 w-full'       name="application" id="application" 
                         class="w-full text-gray-400 mt-2 font-semibold text-sm bg-white border file:cursor-pointer cursor-pointer file:border-0 file:py-3 file:px-4 file:mr-4 file:bg-gray-100 file:hover:bg-gray-200 file:text-gray-500 rounded" />
                     {/* <p class="text-xs text-gray-400 mt-2">PDF is Allowed.</p> */}
