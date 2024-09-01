@@ -37,7 +37,12 @@ const Login = () => {
       dispatch(setToken(response?.data?.token))
       dispatch(setUser(response?.data?.user))
       toast.success("You are logged in ")
-      navigate("/apply-bail")
+      if(response?.data?.user?.accountType==="admin"){
+        navigate("/admin")
+      }
+      else {
+        navigate("/apply-bail")
+      }
     }
     catch(err){
       console.log(err);

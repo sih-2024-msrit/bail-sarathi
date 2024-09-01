@@ -29,8 +29,8 @@ const UserSchema=new mongoose.Schema({
     },
     accountType:{
         type:String,
-        enum:['judge','lawyer'],
-        default:'lawyer'
+        enum:['Judge','Lawyer'],
+        default:'Lawyer'
     },
     token:{
         type:String

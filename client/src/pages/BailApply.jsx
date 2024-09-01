@@ -17,6 +17,7 @@ const BailApply = () => {
 
     const [data, setData] = useState({
         jurisdiction: "",
+        judgeLience: "",
         caseDetails: null,
         application: null,
     })
@@ -77,10 +78,10 @@ const BailApply = () => {
                 <p className='text-3xl'>Enter your case details</p>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-10'>
                     <div className='flex flex-row gap-12 mt-12'>
-                        {/* <div className='bg-white w-[300px] rounded-md py-2 px-4'>
-                            <label htmlFor="applicationNo" className='border-none text-xs text-gray-500 flex flex-col text-grey bg-transparent'>Application Number:</label>
-                            <input onChange={handleChange} className="relative w-max border-none focus:outline-none bg-transparent rounded-md" type="text" id='applicationNo' name='applicationNo' />
-                        </div> */}
+                        <div className='bg-white w-[300px] rounded-md py-2 px-4'>
+                            <label htmlFor="judgeLicense" className='border-none text-xs text-gray-500 flex flex-col text-grey bg-transparent'>Judge Licence:</label>
+                            <input onChange={handleChange} className="relative w-max border-none focus:outline-none bg-transparent rounded-md" type="text" id='judgeLicense' name='judgeLicense' />
+                        </div>
                         <div className='bg-white w-[300px] rounded-md py-2 px-4'>
                             <label htmlFor="jurisdiction" className='border-none text-xs text-gray-500 flex flex-col text-grey bg-transparent'>Jurisdiction:</label>
                             <input onChange={handleChange} className="border-none focus:outline-none  bg-transparent rounded-md" type="text" id='jurisdiction' name='jurisdiction' />

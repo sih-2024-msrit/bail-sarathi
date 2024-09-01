@@ -12,7 +12,7 @@ const {LAWYER_BAIL_API}=bailoutEndpoints
 const AppliedBail = React.forwardRef((props,ref) => {
     const itemsPerPage = 8;  
     const [data,setData]=useState([]);
-    const dispatch=useDispatch();
+    const [filterAppData, setFilterAppData] = useState([]);
     const {user}=useSelector((state)=>state.user)
     function formatDate(date) {
       const d = new Date(date);
@@ -26,8 +26,6 @@ const AppliedBail = React.forwardRef((props,ref) => {
     const [filteredData, setFilteredData] = useState(data);
   
     useEffect(() => {
-      
-
       const timeoutId = setTimeout(() => {
         const filteredResults = data.filter(item =>
           item.applicationNo.toLowerCase().includes(searchQuery.toLowerCase())
@@ -61,13 +59,13 @@ const AppliedBail = React.forwardRef((props,ref) => {
     const fetchData=async()=>{
         
       try{
-        
         const response=await apiConnector("POST",LAWYER_BAIL_API,{license:user?.license});
         if(!response?.data?.success){
           throw new Error("couldnt get bail applications for the lawyer")
         }
         console.log("RESPONSE:",response);
         setData(response?.data?.bailData);
+        setFilterAppData(response?.data?.bailData);
        
       }
       catch(err){
@@ -94,11 +92,26 @@ const AppliedBail = React.forwardRef((props,ref) => {
     const handleSearchChange = (event) => {
       setSearchQuery(event.target.value);
     };
+
+    const filterAppDatas = (status) => {
+      if (status === 'All') {
+        setFilterAppData(data);
+      } else {
+        const filteredResults = data.filter(item =>
+          item.status.toLowerCase().includes(status.toLowerCase())
+        );
+        setFilterAppData(filteredResults);
+      }
+    }
   
     return (
       <div className='p-4'>
         <div className='flex flex-row justify-between px-10 py-8'>
           <p className='text-3xl'>Yours applied bail</p>
+          <button onClick={()=>(filterAppDatas('All'))}>All</button>
+          <button onClick={()=>(filterAppDatas('Pending'))}>Pending</button>
+          <button onClick={()=>(filterAppDatas('Rejected'))}>Rejected</button>
+          <button onClick={()=>(filterAppDatas('Accepted'))}>Accepted</button>
           <form className='flex flex-col'>
             <div className='relative border border-black w-[300px] py-2 px-4'>
               <input
@@ -128,8 +141,8 @@ const AppliedBail = React.forwardRef((props,ref) => {
               </tr>
             </thead>
             <tbody>
-              {data.length > 0 ? (
-                data.map((item, index) => (
+              {filterAppData.length > 0 ? (
+                filterAppData.map((item, index) => (
                   <tr key={index} className='text-center border-b-2 border-gray-400'>
                     <td className='py-2'>{item.applicationNo}</td>
                     <td className='py-2'>{formatDate(Date.now())}</td>

@@ -37,11 +37,11 @@ const uploadToFirebase = (file, prefix) => {
 
 exports.createApplication = async (req, res) => {
     try {
-        const { jurisdiction,license} = req.body;
+        const { jurisdiction,license, judgeLicense} = req.body;
         let caseDetails = req.body.caseDetails;
         // const { application, caseDetails } = req.files;
         const { application } = req.files;
-        if (  !jurisdiction || !application || !license) {
+        if (  !jurisdiction || !application || !license || !judgeLicense) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required, please try again"
@@ -71,7 +71,8 @@ exports.createApplication = async (req, res) => {
                 jurisdiction,
                 caseDetails:textResponse,
                 application:applicationPdfUrl,
-                lawyer:license
+                lawyer:license,
+                judgeLicense
             });
 
             return res.status(200).json({
@@ -91,7 +92,8 @@ exports.createApplication = async (req, res) => {
                 jurisdiction,
                 caseDetails,
                 application:applicationPdfUrl,
-                lawyer:license
+                lawyer:license,
+                judgeLicense
             });
 
             return res.status(200).json({
@@ -140,6 +142,40 @@ exports.getLawyerBail=async(req,res)=>{
         })
     }
 }
+
+exports.getJudgeBail=async(req,res)=>{
+    try{
+        const {judgeLicense}=req.body;
+        console.log("JUDGE LICENSE:",judgeLicense)
+        if(!judgeLicense){
+            return res.status(404).json({
+                success:false,
+                message:"license not found"
+            })
+        }
+
+        let bailData=await Bailout.find({judgeLicense});
+        
+        if(!bailData){
+            bailData=[]
+        }
+
+        return res.status(200).json({
+            success:true,
+            message:"successfully fetched all the applications",
+            bailData
+        })
+    }
+    catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success:false,
+            message:"couldnt get judge bail applicatiosn"
+        })
+    }
+}
+
+
 exports.bailSummary = async (req, res) => {
     try {
         const { applicationNo, flag } = req.body;
