@@ -16,7 +16,15 @@ const BailoutSchema=new mongoose.Schema({
     application:{
         type:String,
         required:true,
-        default:"Pending"
+    },
+    status:{
+        type:String,
+        default:"pending",
+        enum:["pending","accepted","rejected"]
+    },
+    lawyer:{
+        type:String,
+        required:true,
     }
     },
     {
