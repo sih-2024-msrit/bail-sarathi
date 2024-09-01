@@ -4,10 +4,21 @@ import { apiConnector } from '../services/apiConnector';
 import { bailoutEndpoints } from '../services/api';
 import Footer from '../components/Footer';
 import Navbar from '../components/Navbar';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 
 const {BAIL_APPLY_API}=bailoutEndpoints;
+
+
 const BailApply = () => {
+
+    const {accountType} = useSelector((state) => state.user)
+    const navigate = useNavigate()
+    if(accountType === "admin") {
+        navigate("/admin")
+    }
+
   const [data,setData]=useState({
     applicationNo:"",
     jurisdiction:"",
