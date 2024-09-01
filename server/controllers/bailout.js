@@ -4,7 +4,21 @@ const fs = require("fs");
 const path = require("path");
 const axios = require('axios')
 const formData=require('form-data')
-const pdfParse=require('pdf-parse')
+const pdfParse=require('pdf-parse');
+const mailSender = require('../utils/mailSender');
+const statusUpdate = require('../mails/statusUpdate');
+const user = require('../models/user');
+
+async function sendmail(email, status, applicationNo, judgeLicense) {
+    try{
+        const mailResponse=await mailSender(email,"Status Update",statusUpdate(status, applicationNo, judgeLicense));
+        console.log("Email sent successfully:",mailResponse);
+    }
+    catch(error){
+        console.log("Error occured while sending mails:",error);
+        throw error;
+    }
+}
 
 const uploadToFirebase = (file, prefix) => {
     return new Promise((resolve, reject) => {
@@ -200,6 +214,10 @@ exports.changeStatus = async (req, res) => {
 
         bailDetails.status = status.toLowerCase();
         await bailDetails.save();
+        const userdetail = await user.findOne({license: bailDetails.lawyer});
+        console.log("user"   , userdetail)
+        // email, status, applicationNo, judgeLicense
+        sendmail(userdetail.email, status, bailDetails.applicationNo, bailDetails.judgeLicense);        
 
         return res.status(200).json({
             success: true,
