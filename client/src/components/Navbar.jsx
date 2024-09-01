@@ -2,7 +2,7 @@ import React from 'react'
 import { ImParagraphRight } from "react-icons/im";
 import { IoMdSearch } from "react-icons/io"
 import image from '../assets/dummy.png'
-import ministry from "../assets/ministryy.png"
+import ministry from "../assets/image.png"
 
 
 const Navbar = () => {

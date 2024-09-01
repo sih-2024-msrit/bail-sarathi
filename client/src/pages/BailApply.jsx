@@ -75,7 +75,7 @@ const BailApply = () => {
         <div>
             <Navbar />
             <div className='px-16'>
-                <p className='text-3xl'>Enter your case details</p>
+                <p className='text-3xl dm-serif-display mt-4'>Enter your case details</p>
                 <form onSubmit={handleSubmit} className='flex flex-col gap-10'>
                     <div className='flex flex-row gap-12 mt-12'>
                         <div className='bg-white w-[300px] rounded-md py-2 px-4'>
@@ -90,9 +90,9 @@ const BailApply = () => {
 
                     <div className='max-w-2xl'>
                         <h2>Case Details:</h2>
-                        <div className='flex flex-col items-center gap-2'>
-                            <div onClick={() => setShowWrite(true)} className={`border-black border w-48 inline rounded-md`}>Write Case Details</div>
-                            <div onClick={() => setShowWrite(false)} className={` border-black border w-48 inline rounded-md`}>Upload Case Details</div>
+                        <div className='flex flex-row mx-auto gap-2'>
+                            <div onClick={() => setShowWrite(true)} className={`px-3 py-1.5 ${(showWrite) ? "text-black border-black": "text-gray-600 border-gray-600"}  border w-48 inline`}>Write Case Details</div>
+                            <div onClick={() => setShowWrite(false)} className={`px-3 py-1.5 ${showWrite ? "text-gray-600 border-gray-600": "text-black border-black"} border-black border w-48 inline`}>Upload Case Details</div>
                         </div>
 
                         {/*text option*/}
@@ -120,7 +120,7 @@ const BailApply = () => {
                     <p class="text-xs text-gray-400 mt-2">PDF is Allowed.</p>
                     </div>
 
-                    <button className="hover:cursor-pointer bg-[#1E2E45] text-white py-2 px-5 w-max hover:bg-[#33527e]" type='submit'>Submit</button>
+                    <button className="dm-serif-display hover:cursor-pointer bg-[#1E2E45] text-white py-2 px-5 w-max hover:bg-[#33527e]" type='submit'>Submit</button>
                 </form>
             </div>
             <AppliedBail ref={childRef}/>
