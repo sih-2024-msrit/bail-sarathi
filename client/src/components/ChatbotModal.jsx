@@ -65,13 +65,13 @@ const ChatbotModal = () => {
       {/* Button to toggle modal visibility */}
       <div
         onClick={() => setIsVisible(!isVisible)}
-        className={`absolute hover:cursor-pointer items-center ${isVisible ? "hidden" : "flex"} justify-center w-20 h-20 rounded-full bg-white bottom-5 right-5`}
+        className={`fixed z-10 hover:cursor-pointer items-center ${isVisible ? "hidden" : "flex"} justify-center w-20 h-20 rounded-full bg-white bottom-5 right-5`}
       >
         <img src={chatlogo} height={40} width={40} alt="" />
       </div>
 
       {/* Chatbot modal */}
-      <div className={`absolute ${isVisible ? "flex flex-col" : "hidden"} bottom-5 h-[500px] w-[380px] grid grid-rows-[auto_1fr_auto] bg-white right-5 rounded-lg shadow-lg`}>
+      <div className={`fixed z-10 ${isVisible ? "flex flex-col" : "hidden"} bottom-5 h-[500px] w-[380px] grid grid-rows-[auto_1fr_auto] bg-white right-5 rounded-lg shadow-lg`}>
 
         {/* Close icon */}
         <div className='w-full p-2 place-item-end text-right'>

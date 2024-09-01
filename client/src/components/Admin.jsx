@@ -136,7 +136,7 @@ const Admin = () => {
             {filterAppData.length > 0 ? (
               filterAppData.map((item, index) => (
                 <tr key={index} className='text-center border-b-2 border-gray-400'>
-                  <td className='py-2' onClick={() => (navigate(item.applicationNo))}>{item.applicationNo}</td>
+                  <td className='py-2 hover:cursor-pointer' onClick={() => (navigate(item.applicationNo))}>{item.applicationNo}</td>
                   <td className='py-2'>{formatDate(Date.now())}</td>
                   <td className='py-2'>{item.jurisdiction}</td>
                   <td className='py-2 text-blue-600 underline'><a href={item.document}>view</a></td>

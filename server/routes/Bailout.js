@@ -1,6 +1,6 @@
 const { Router } = require("express");
 // const { Makebailout, bailoutStatus } = require("../controllers/bailout");
-const {createApplication,testFlask, bailSummary, getLawyerBail, getJudgeBail, changeStatus}=require('../controllers/bailout')
+const {createApplication,testFlask, bailSummary, getLawyerBail,testChatBot, getJudgeBail, changeStatus}=require('../controllers/bailout')
 const router = Router();
 
 // for judge
