@@ -9,6 +9,7 @@ if server_dir not in sys.path:
     sys.path.append(server_dir)
 
 from scripts.previousCases.keyphrasesextraction import *
+
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.schema import HumanMessage
 

@@ -13,12 +13,6 @@ const {BAIL_APPLY_API}=bailoutEndpoints;
 
 const BailApply = () => {
 
-    const {accountType} = useSelector((state) => state.user)
-    const navigate = useNavigate()
-    if(accountType === "admin") {
-        navigate("/admin")
-    }
-
   const [data,setData]=useState({
     applicationNo:"",
     jurisdiction:"",

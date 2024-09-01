@@ -1,11 +1,11 @@
 # IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
-import sys
-import os
+# import sys
+# import os
 
 
-server_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-if server_dir not in sys.path:
-    sys.path.append(server_dir)
+# server_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+# if server_dir not in sys.path:
+#     sys.path.append(server_dir)
 
 from langchain.prompts import PromptTemplate
 
