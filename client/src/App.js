@@ -7,10 +7,13 @@ import Login from "./pages/Login"
 import ApplicationStatus from "./pages/ApplicationStatus";
 import BailApply from "./pages/BailApply";
 import BailSumary from "./pages/BailSumary";
+import ChatbotModal from "./components/ChatbotModal";
+
+
 function App() {
   return (
-    <div className="bg-slategray min-h-screen">
-
+    <div className="relative bg-slategray min-h-screen">
+      <ChatbotModal/>
   
       <Routes>
         <Route path="/admin" element={<AdminDashboard />} />

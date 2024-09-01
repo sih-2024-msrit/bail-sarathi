@@ -290,3 +290,43 @@ exports.testFlask = async (req, res) => {
 
 //-->cd pdf --> req,body-->cd agar wha se aagay -> application ki pdf upload -->url -->url ko db
 //-->cd -->req.files-->dono ko upload pdf-->dono ko url-->dono ko url 
+
+exports.testChatBot=async(req,res)=>{
+    try{
+        const {
+            question
+        }=req.body;
+
+        console.log("request body:",req.body);
+        if(!question){
+            return res.status(404).json({
+                success:false,
+                message:"question not given"
+            })
+        }
+
+        const response=await axios.post('http://localhost:5000/chatbot',{question:question},{
+            headers:'multipart/form-data'
+        });
+
+        if(!response){
+            return res.status(404).json({
+                success:false,
+                message:"Bot didnt give the response,he is annoyed :-("
+            })
+        }
+        console.log("Response from the chatbot",response);
+        return res.status(200).json({
+            success:true,
+            message:"chatbot replied happily",
+            response:response.data
+        })
+    }
+    catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success:false,
+            message:"some thing went wrong"
+        })
+    }
+}

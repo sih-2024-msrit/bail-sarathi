@@ -18,4 +18,5 @@ export const bailoutEndpoints = {
     BAIL_SUMMARY_API:BASE_URL + "/bailout/bail-summary",
     LAWYER_BAIL_API:BASE_URL + "/bailout/get-lawyer-bails",
     JUDGE_BAIL_API:BASE_URL + "/bailout/get-judge-bails",
+    TEST_CHATBOT_APU:BASE_URL + "/bailout/test-chatbot",
 }
