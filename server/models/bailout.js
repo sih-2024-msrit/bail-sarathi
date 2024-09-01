@@ -25,6 +25,10 @@ const BailoutSchema=new mongoose.Schema({
     lawyer:{
         type:String,
         required:true,
+    },
+    judgeLicense: {
+        type:String,
+        required:true,
     }
     },
     {

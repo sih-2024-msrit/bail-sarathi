@@ -71,13 +71,13 @@ const Signup = () => {
         </select>
         <p>Account Type:</p>
         <span>
-        <input onChange={handleChange} type="radio" name="accountType" id="Lawyer" />
-        <label htmlFor="Lawyer">lawyer</label>  
+        <input onChange={handleChange} type="radio" name="accountType" id="lawyer" />
+        <label htmlFor="lawyer">lawyer</label>  
         </span>
      
         <span>
-        <input onChange={handleChange}  type="radio" name="accountType" id="Judge" />
-        <label htmlFor="Judge">judge</label> 
+        <input onChange={handleChange}  type="radio" name="accountType" id="judge" />
+        <label htmlFor="judge">judge</label> 
         </span>
 
         <label htmlFor="location">Location</label>
