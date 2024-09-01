@@ -2,50 +2,64 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { bailSummary } from '../services/operations/bailAPI';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import ReactMarkdown from "react-markdown";
 import toast from 'react-hot-toast';
+import { apiConnector } from '../services/apiConnector';
+import { bailoutEndpoints } from "../services/api";
+
+const { STATUS_CHANGE } = bailoutEndpoints;
 
 const BailSummary = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { applicationNo } = useParams();
+
   const topics = ['Bail Summary', 'Previous Cases', 'IPC Section', 'Criminal Record'];
-  const newTopics=[   
-    'bailSummary',
-    'previousCases',
-    'ipcSection',
-    ,'criminalRecord'];
+  const newTopics = ['bailSummary', 'previousCases', 'ipcSection', 'criminalRecord'];
   const shortform = ['bs', 'pc', 'is', 'cr'];
   const [topic, setTopic] = useState(0);
-  const { applicationNo } = useParams();
+
   const [data, setData] = useState({
     bailSummary: "",
     previousCases: "",
-    ipcSection:  null,
+    ipcSection: null,
     criminalRecord: null
   });
-
 
   useEffect(() => {
     const fetchBailSummary = async () => {
       try {
-        const formData = { flag: 'pc', applicationNo };
+        const formData = { flag: 'bs', applicationNo }; 
         const response = await dispatch(bailSummary(formData));
-        console.log("RESPONSE:",response);
+        console.log("RESPONSE:", response);
         setData(prevData => ({
           ...prevData,
-          bailSummary:response
+          bailSummary: response
         }));
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     };
-    fetchBailSummary();
-  }, []);
+    if (applicationNo) {
+      fetchBailSummary();
+    }
+  }, [dispatch, applicationNo]);
 
-  console.log("RESPONSE IN BODY:",data);
+  console.log("RESPONSE IN BODY:", data);
 
-
+  const changeStatus = async (status) => {
+    const formData = { status, applicationNo };
+    try {
+      const response = await apiConnector("POST", STATUS_CHANGE, formData);
+      console.log("RESPONSE:", response);
+      toast.success('Status updated successfully');
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast.error('Error updating status');
+    }
+  };
 
   const descriptions = [
     data.bailSummary,
@@ -60,23 +74,22 @@ const BailSummary = () => {
       try {
         const formData = { flag: shortform[index], applicationNo: applicationNo };
         const response = await dispatch(bailSummary(formData));
-        if(shortform[index]==='cr'){
+        if (shortform[index] === 'cr') {
           setData(prevData => ({
             ...prevData,
-            'criminalRecord':response
+            'criminalRecord': response
+          }));
+        } else {
+          setData(prevData => ({
+            ...prevData,
+            [newTopics[index]]: response
           }));
         }
-        else{
-        setData(prevData => ({
-          ...prevData,
-          [newTopics[index]]:response
-        }));
-      }
       } catch (error) {
         console.error('Error fetching data:', error);
       }
     }
-  
+
     console.log('Generate button clicked for topic:', topics[index]);
   };
 
@@ -90,35 +103,50 @@ const BailSummary = () => {
               <button
                 key={index}
                 onClick={() => handleGenerate(index)}
-                className={`border-0 pb-1 ${topic === index ? 'text-black border-b-2 border-black' : 'text-[#808080]'}`}
+                className={`border-0 pb-1 dm-serif-display ${topic === index ? 'text-black border-b-2 border-black' : 'text-[#808080]'}`}
               >
                 {top}
               </button>
             ))}
           </div>
-          <div className='text-lg mt-4'>            
+          <div className='text-lg mt-4'>
             {
-              (topic===2)?(
-                descriptions[topic]===null?("generating..."):(Object.entries(descriptions[topic]).map(([key,value],index)=>(
-                  <li>
-                    {key}:{value.join(", ")}
+              (topic === 2) ? (
+                descriptions[topic] === null ? ("Generating...") : (Object.entries(descriptions[topic]).map(([key, value], index) => (
+                  <li key={index}>
+                    {key}: {value.join(", ")}
                   </li>
                 )))
-              ):(
-                topic==3?
-                (
-                  descriptions[topic]===null?("generating..."):(JSON.parse(descriptions[topic])?.map((item)=>(
-                    <li>{item?.toString()}</li>
-                  )))
-                )
-                
-                :(<ReactMarkdown>{descriptions[topic]?.toString().length===0?("Generating...."):(descriptions[topic]?.toString())}</ReactMarkdown>)
-    
-              
+              ) : (
+                topic === 3 ?
+                  (
+                    descriptions[topic] === null ? ("Generating...") : (() => {
+                      try {
+                        return JSON.parse(descriptions[topic])?.map((item, index) => (
+                          <li key={index}>{item?.toString()}</li>
+                        ));
+                      } catch {
+                        return <li>Invalid data format</li>;
+                      }
+                    })()
+                  )
+                  : (<ReactMarkdown>{descriptions[topic]?.toString().length === 0 ? ("Generating...") : (descriptions[topic]?.toString())}</ReactMarkdown>)
               )
             }
           </div>
         </div>
+      </div>
+
+      <div className='w-[60%] mx-auto'>
+        <form className='flex flex-row justify-between w-full gap-4'>
+          <div className='flex justify-between'>
+            <button type="button" onClick={() => navigate(-1)} className='dm-serif-display bg-gray-300 text-white p-2 w-[100px] h-[45px]'>Back</button>
+          </div>
+          <div className='flex flex-row gap-10'>
+              <button type="button" onClick={() => changeStatus('Accepted')} className='dm-serif-display bg-green-500 text-white p-2 w-[100px] h-[45px]'>Accept</button>
+            <button type="button" onClick={() => changeStatus('Rejected')} className='dm-serif-display bg-red-500 text-white p-2 w-[100px] h-[45px]'>Reject</button>
+          </div>
+        </form>
       </div>
       <div className='p-4 flex justify-center'></div>
       <Footer />

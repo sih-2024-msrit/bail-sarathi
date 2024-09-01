@@ -6,8 +6,11 @@ import {useDispatch} from "react-redux"
 import { setToken } from '../slices/authSlice';
 import { setUser } from '../slices/userSlice';
 import image from '../assets/bail_woman.PNG'
+import logolight from "../assets/logodark.png"
 import { IoEyeOffSharp ,IoEyeSharp } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
+import mncimage from '../assets/minstryLogo.png'
+
 
 const {LOGIN_API} =authEndpoints;
 const Login = () => {
@@ -37,7 +40,7 @@ const Login = () => {
       dispatch(setToken(response?.data?.token))
       dispatch(setUser(response?.data?.user))
       toast.success("You are logged in ")
-      if(response?.data?.user?.accountType==="admin"){
+      if(response?.data?.user?.accountType==="Judge"){
         navigate("/admin")
       }
       else {
@@ -57,9 +60,9 @@ const Login = () => {
   return (
     <div className='w-screen bg-slategray flex-row justify-between text-black flex gap-5 '>
       <div className='my-auto flex flex-col gap-y-10 place-items-center mx-auto'>
-       
+          <img src={mncimage} alt="jmc" className='w-36 rounded-full'/>
           <div className='flex flex-row place-items-center mb-6 mx-auto gap-3'>
-            <img src={image} alt="logo" className='w-10 h-10 rounded-full'/>
+            <img src={logolight} alt="logo" className='w-10 h-10 rounded-full'/>
             <h1 className='text-3xl text-black font-bold'>Bail Sarathi</h1>
           </div>
           <form onSubmit={handleSubmit} className='flex gap-y-5 flex-col gap-2'>
@@ -83,7 +86,7 @@ const Login = () => {
                 </span>
               </div>
             </div>
-            <button className="mx-auto hover:cursor-pointer bg-[#1E2E45] text-white py-2 px-5 w-max hover:bg-[#33527e]" type='submit'>Log In</button>
+            <button className="mx-auto dm-serif-display hover:cursor-pointer bg-[#1E2E45] text-white py-2 px-5 w-max hover:bg-[#33527e]" type='submit'>Log In</button>
           </form>
      
       </div>

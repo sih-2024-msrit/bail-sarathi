@@ -8,10 +8,12 @@ const AdminDashboard = () => {
 
   
   return (
-    <div className='w-full'>
+    <div className='min-h-[100vh] relative'>
       <Navbar/>
       <Admin/>
+      <div className='bottom-0 absolute w-full'>
       <Footer/>
+      </div>
     </div>
   )
 }

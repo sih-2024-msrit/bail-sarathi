@@ -95,11 +95,14 @@ const Admin = () => {
   return (
     <div className='p-4'>
       <div className='flex flex-row justify-between px-10 py-8'>
-        <p className='text-3xl'>Case Details</p>
-        <button onClick={()=>(filterAppDatas('All'))}>All</button>
-        <button onClick={()=>(filterAppDatas('Pending'))}>Pending</button>
-        <button onClick={()=>(filterAppDatas('Rejected'))}>Rejected</button>
-        <button onClick={()=>(filterAppDatas('Accepted'))}>Accepted</button>
+        <p className='text-3xl dm-serif-display'>Case Details</p>
+        <div className='flex flex-row gap-4'>
+            <div className='flex border border-black mr-3 gap-4 p-2'>
+            <button onClick={()=>(filterAppDatas('All'))}>All</button>
+            <button onClick={()=>(filterAppDatas('Pending'))}>Pending</button>
+            <button onClick={()=>(filterAppDatas('Rejected'))}>Rejected</button>
+            <button onClick={()=>(filterAppDatas('Accepted'))}>Accepted</button>
+          </div>
         <form className='flex flex-col'>
           <div className='relative border border-black w-[300px] py-2 px-4'>
             <input
@@ -110,10 +113,11 @@ const Admin = () => {
               className='relative w-[300px] border-none focus:outline-none bg-transparent rounded-md'
               value={searchQuery}
               onChange={handleSearchChange}
-            />
+              />
             <IoIosSearch className='absolute right-4 top-3 text-gray-500' />
           </div>
         </form>
+        </div>
       </div>
 
       {/* Table Heading */}
@@ -121,11 +125,11 @@ const Admin = () => {
         <table className='min-w-full place-items-center'>
           <thead>
             <tr className='text-center text-gray-500'>
-              <th className='px-6 py-2 '>Application Number</th>
-              <th className='px-6 py-2'>Date</th>
-              <th className='px-6 py-2'>Jurisdiction</th>
-              <th className='px-6 py-2'>Document</th>
-              <th className='px-6 py-2'>Status</th>
+              <th className='px-6 py-2 text-lg dm-serif-display'>Application Number</th>
+              <th className='px-6 py-2 text-lg dm-serif-display'>Date</th>
+              <th className='px-6 py-2 text-lg dm-serif-display'>Jurisdiction</th>
+              <th className='px-6 py-2 text-lg dm-serif-display'>Document</th>
+              <th className='px-6 py-2 text-lg dm-serif-display'>Status</th>
             </tr>
           </thead>
           <tbody>
@@ -136,7 +140,7 @@ const Admin = () => {
                   <td className='py-2'>{formatDate(Date.now())}</td>
                   <td className='py-2'>{item.jurisdiction}</td>
                   <td className='py-2 text-blue-600 underline'><a href={item.document}>view</a></td>
-                  <td className='py-2 text-green-500'>{item.status}</td>
+                  <td className={`py-2 ${item.status == 'accepted' ? "text-green-500" :item.status == 'rejected'? "text-red-500" : "text-blue-500" }`}>{item.status} </td>
                 </tr>
               ))
             ) : (

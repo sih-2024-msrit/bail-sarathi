@@ -12,7 +12,7 @@ import ChatbotModal from "./components/ChatbotModal";
 
 function App() {
   return (
-    <div className="relative bg-slategray min-h-screen">
+    <div className="relative dm-serif bg-slategray min-h-screen">
       <ChatbotModal/>
   
       <Routes>

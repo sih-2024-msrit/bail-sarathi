@@ -175,6 +175,45 @@ exports.getJudgeBail=async(req,res)=>{
     }
 }
 
+exports.changeStatus = async (req, res) => {
+    try {
+        const { applicationNo, status } = req.body;
+        console.log("REQUEST BODY:", req.body)
+        if (!applicationNo || !status) {
+            return res.status(400).json({
+                success: false,
+                message: "All fields are required"
+            });
+        }
+
+        console.log("STATUS CHANGE ENTRY")
+        
+        const bailDetails = await Bailout.findOne({ applicationNo });
+        if (!bailDetails) {
+            return res.status(404).json({
+                success: false,
+                message: "The bail application couldnt be found"
+            });
+        }
+
+        console.log("STATUS CHANGE SEARCH")
+
+        bailDetails.status = status.toLowerCase();
+        await bailDetails.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Status updated successfully"
+        });
+    } catch (err) {
+        console.error("Error while updating status", err);
+        return res.status(500).json({
+            success: false,
+            message: "Couldn't update status"
+        });
+    }
+}
+
 
 exports.bailSummary = async (req, res) => {
     try {
