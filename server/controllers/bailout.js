@@ -254,7 +254,7 @@ exports.bailSummary = async (req, res) => {
         }
         console.log("BAIL SUMMARY ENTRY")
         const bailDetails = await Bailout.findOne({
-            _id: '66d2c1f4a0ef3b1ca14ace0d'
+            applicationNo: applicationNo
         });
 
         console.log("BAIL SUMMARY SEARCH")

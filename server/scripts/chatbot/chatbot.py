@@ -19,7 +19,7 @@ def load_knowledge_base(file_path: str) -> str:
 
 def get_response(question):
 
-    knowledge_base = load_knowledge_base('/home/ashutosh/Projects/SIH 24/bail-sarathi/server/scripts/chatbot/knowledge_base.txt')
+    knowledge_base = load_knowledge_base('C:/full_St/bail-reckoner/server/scripts/chatbot/knowledge_base.txt')
 
     exit_commands = {"bye", "exit", "quit"}
 
