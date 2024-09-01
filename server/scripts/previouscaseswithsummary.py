@@ -71,7 +71,7 @@ def Previous_Cases_With_Summary_Fetch(bail_applicant_case_record_text, path_vect
     
     print(counter)
     # Store the result in the summaries dictionary
-    file_path = "/content/drive/MyDrive/Bail_Saarathi/datasets/Case_Files_PDF/State_vs_Neetu_Anr_on_18_February_2021.PDF"
+    file_path = case_file
 
     # Replace the base directory and forward slashes
     windows_path = file_path.replace('/content/drive/MyDrive', 'C:\\full_St\\bail-reckoner\\server\\scripts')

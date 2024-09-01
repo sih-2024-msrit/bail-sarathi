@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { bailSummary } from '../services/operations/bailAPI';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import ReactMarkdown from "react-markdown";
 import toast from 'react-hot-toast';
 import { apiConnector } from '../services/apiConnector';
 import { bailoutEndpoints } from "../services/api";
+import pcdata from './pc.json'
+
 
 const { STATUS_CHANGE } = bailoutEndpoints;
 
@@ -130,8 +132,18 @@ const BailSummary = () => {
                       }
                     })()
                   )
-                  : 
+                  : topic === 0 ?
                   (<ReactMarkdown>{descriptions[topic]?.toString().length === 0 ? ("Generating...") : (descriptions[topic]?.toString())}</ReactMarkdown>)
+                  :
+                  pcdata?.map((item, index) => (
+                    <li key={index}>
+                      <p><strong>URL:</strong> <a className='text-blue-600 underline hover:cursor-pointer' target='_blank' href={item.url}>url link</a></p>
+                      <p><strong>Content:</strong> <ReactMarkdown>{item.content}</ReactMarkdown> </p>
+                      <p><strong>Page Number:</strong> {item.page_no}</p>
+                    </li>
+                  ))
+                  
+                  
               )
             }
           </div>
