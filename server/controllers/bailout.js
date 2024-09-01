@@ -51,71 +51,78 @@ const uploadToFirebase = (file, prefix) => {
 
 exports.createApplication = async (req, res) => {
     try {
-        const { jurisdiction,license, judgeLicense} = req.body;
+        const { jurisdiction, license, judgeLicense } = req.body;
         let caseDetails = req.body.caseDetails;
-        // const { application, caseDetails } = req.files;
         const { application } = req.files;
-        if (  !jurisdiction || !application || !license || !judgeLicense) {
+    
+        if (!jurisdiction || !application || !license || !judgeLicense) {
             return res.status(400).json({
                 success: false,
                 message: "All fields are required, please try again"
             });
         }
-
+    
+        const apptempPath = application.tempFilePath;
+        const applicationTextBuffer = fs.readFileSync(apptempPath);
+        const applicationTextData = await pdfParse(applicationTextBuffer);
+        const applicationText = applicationTextData.text;
+    
         if (!caseDetails) {
-            //caseDetails is a pdf -->send to python -->get the text -->store in db
-            caseDetails = req.files.caseDetails;
-
-
-            const cdtempPath=caseDetails.tempFilePath;
-
-            const pdfBuffer=fs.readFileSync(cdtempPath);
-
-            const pdfData=await pdfParse(pdfBuffer);
-
-            const textResponse=pdfData.text;
-
-            console.log("Text Response:",textResponse);
-
+            // caseDetails is a pdf --> send to python --> get the text --> store in db
+            const caseDetailsFile = req.files.caseDetails;
+            if (!caseDetailsFile) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Case details file is required"
+                });
+            }
+    
+            const cdtempPath = caseDetailsFile.tempFilePath;
+            const pdfBuffer = fs.readFileSync(cdtempPath);
+            const pdfData = await pdfParse(pdfBuffer);
+            const textResponse = pdfData.text;
+    
+            console.log("Text Response:", textResponse);
+    
             const applicationPdfUrl = await uploadToFirebase(application, 'applications');
-            const applicationNo=Date.now();
-            // Create Bailout document
+            const applicationNo = Date.now();
+    
             const bailApply = await Bailout.create({
                 applicationNo,
                 jurisdiction,
-                caseDetails:textResponse,
-                application:applicationPdfUrl,
-                lawyer:license,
-                judgeLicense
+                caseDetails: textResponse,
+                application: applicationPdfUrl,
+                lawyer: license,
+                judgeLicense,
+                applicationText
             });
-
+    
             return res.status(200).json({
-                success:true,
-                message:"Bail Applied successfully"
-            })
-
-        }
-        else {
-            //caseDetails is text -->store in db 
+                success: true,
+                message: "Bail Applied successfully"
+            });
+    
+        } else {
+            // caseDetails is text --> store in db
             const applicationPdfUrl = await uploadToFirebase(application, 'applications');
-
-            // Create Bailout document
-            const applicationNo=Date.now();
+            const applicationNo = Date.now();
+    
             const bailApply = await Bailout.create({
                 applicationNo,
                 jurisdiction,
                 caseDetails,
-                application:applicationPdfUrl,
-                lawyer:license,
-                judgeLicense
+                application: applicationPdfUrl,
+                lawyer: license,
+                judgeLicense,
+                applicationText
             });
-
+    
             return res.status(200).json({
-                success:true,
-                message:"Bail Applied successfully"
-            })
+                success: true,
+                message: "Bail Applied successfully"
+            });
         }
-
+    
     } catch (err) {
         console.error("Error while creating application", err);
         return res.status(500).json({
@@ -123,6 +130,7 @@ exports.createApplication = async (req, res) => {
             message: "Couldn't create application"
         });
     }
+    
 }
 
 exports.getLawyerBail=async(req,res)=>{
@@ -246,7 +254,7 @@ exports.bailSummary = async (req, res) => {
         }
         console.log("BAIL SUMMARY ENTRY")
         const bailDetails = await Bailout.findOne({
-            applicationNo: applicationNo
+            _id: '66d2c1f4a0ef3b1ca14ace0d'
         });
 
         console.log("BAIL SUMMARY SEARCH")
@@ -256,11 +264,11 @@ exports.bailSummary = async (req, res) => {
                 message: "The bail application couldnt be found"
             })
         }
-        console.log("BAIL SUMMARY SEARCH SUCCESSFUL")
+        console.log("BAIL SUMMARY SEARCH SUCCESSFUL", bailDetails.caseDetails)
         let response = '';
 
         if (flag === 'bs') {
-            response = await axios.post("http://localhost:5000/bail-summary", { applicationNo: bailDetails.applicationNo, application: bailDetails.application });
+            response = await axios.post("http://localhost:5000/bail-summary", { applicationNo: bailDetails.applicationNo, application: bailDetails.applicationText });
             if (!response) {
                 return res.status(404).json({
                     success: false,

@@ -31,4 +31,4 @@ def IPC_Sections_Charged(bail_applicant_crime_record_text, path_vector_store):
 
 # bail_applicant_case_record_text = input("Case RECORD: ")
 
-# print(IPC_Sections_Charged(bail_applicant_case_record_text, path_vector_store))
+# print(IPC_Sections_Charged(bail_applicant_case_record_text, path_vector_store)) 
