@@ -49,7 +49,7 @@ def Previous_Cases_With_Summary_Fetch(bail_applicant_case_record_text, path_vect
 
   summaries = {}
   
-  llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0,google_api_key=api_key)
+  llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", temperature=0)
 
   # PromptTemplate
   qa_prompt_template = Summarization_prompting()
@@ -58,8 +58,9 @@ def Previous_Cases_With_Summary_Fetch(bail_applicant_case_record_text, path_vect
 
   for case_file, metadata in mapped_docs.items():
     if counter == no_of_pgs:
-      break
-    counter = no_of_pgs
+      
+      print("\n\n\nEXIT")
+      return summaries
     content = metadata['content']
     page_no = metadata['page_number']
     # Generate the summary using LLM models (do this with LLama or a better summarization model)
@@ -67,16 +68,23 @@ def Previous_Cases_With_Summary_Fetch(bail_applicant_case_record_text, path_vect
     message = [HumanMessage(content=summary_input)]
 
     result = llm(messages=message)
-
+    
+    print(counter)
     # Store the result in the summaries dictionary
-    summaries[case_file] = {"content" : result.content, "page_no": page_no} 
-    print("Case_file:     ", case_file, "\n")
+    file_path = "/content/drive/MyDrive/Bail_Saarathi/datasets/Case_Files_PDF/State_vs_Neetu_Anr_on_18_February_2021.PDF"
+
+    # Replace the base directory and forward slashes
+    windows_path = file_path.replace('/content/drive/MyDrive', 'C:\\full_St\\bail-reckoner\\server\\scripts')
+    windows_path = windows_path.replace('/', '\\')
+    print(windows_path)
+
+    summaries[windows_path] = {"content" : result.content, "page_no": page_no} 
+    print("Case_file:     ", windows_path, "\n")
     print("Summary:       ", result.content)
     print("Page No: ", page_no)
     print()
     counter += 1
   return summaries
-
 # IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII
 
 # path_vector_store = "server/scripts/Bail_Saarathi/vector_database/Case_Files_VectorEmbeddings/"

@@ -17,6 +17,10 @@ const BailoutSchema=new mongoose.Schema({
         type:String,
         required:true,
     },
+    applicationText:{
+        type:String,
+        required:true,
+    },
     status:{
         type:String,
         default:"pending",

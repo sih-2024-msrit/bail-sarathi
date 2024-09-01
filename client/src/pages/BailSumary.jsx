@@ -130,7 +130,8 @@ const BailSummary = () => {
                       }
                     })()
                   )
-                  : (<ReactMarkdown>{descriptions[topic]?.toString().length === 0 ? ("Generating...") : (descriptions[topic]?.toString())}</ReactMarkdown>)
+                  : 
+                  (<ReactMarkdown>{descriptions[topic]?.toString().length === 0 ? ("Generating...") : (descriptions[topic]?.toString())}</ReactMarkdown>)
               )
             }
           </div>

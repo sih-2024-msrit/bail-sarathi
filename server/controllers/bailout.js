@@ -61,6 +61,10 @@ exports.createApplication = async (req, res) => {
                 message: "All fields are required, please try again"
             });
         }
+        const apptempPath=application.tempFilePath;
+        const applicationTextBuffer = fs.readFileSync(apptempPath);
+        const applicationTextData = await pdfParse(applicationTextBuffer);
+        const applicationText = applicationTextData.text;
 
         if (!caseDetails) {
             //caseDetails is a pdf -->send to python -->get the text -->store in db
@@ -86,7 +90,8 @@ exports.createApplication = async (req, res) => {
                 caseDetails:textResponse,
                 application:applicationPdfUrl,
                 lawyer:license,
-                judgeLicense
+                judgeLicense,
+                applicationText
             });
 
             return res.status(200).json({
@@ -107,7 +112,8 @@ exports.createApplication = async (req, res) => {
                 caseDetails,
                 application:applicationPdfUrl,
                 lawyer:license,
-                judgeLicense
+                judgeLicense,
+                applicationText
             });
 
             return res.status(200).json({
@@ -246,7 +252,7 @@ exports.bailSummary = async (req, res) => {
         }
         console.log("BAIL SUMMARY ENTRY")
         const bailDetails = await Bailout.findOne({
-            applicationNo: applicationNo
+            _id: '66d2c1f4a0ef3b1ca14ace0d'
         });
 
         console.log("BAIL SUMMARY SEARCH")
@@ -256,11 +262,11 @@ exports.bailSummary = async (req, res) => {
                 message: "The bail application couldnt be found"
             })
         }
-        console.log("BAIL SUMMARY SEARCH SUCCESSFUL")
+        console.log("BAIL SUMMARY SEARCH SUCCESSFUL", bailDetails.caseDetails)
         let response = '';
 
         if (flag === 'bs') {
-            response = await axios.post("http://localhost:5000/bail-summary", { applicationNo: bailDetails.applicationNo, application: bailDetails.application });
+            response = await axios.post("http://localhost:5000/bail-summary", { applicationNo: bailDetails.applicationNo, application: bailDetails.applicationText });
             if (!response) {
                 return res.status(404).json({
                     success: false,

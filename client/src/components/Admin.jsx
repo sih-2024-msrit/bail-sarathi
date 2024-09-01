@@ -139,7 +139,7 @@ const Admin = () => {
                   <td className='py-2 hover:cursor-pointer' onClick={() => (navigate(item.applicationNo))}>{item.applicationNo}</td>
                   <td className='py-2'>{formatDate(Date.now())}</td>
                   <td className='py-2'>{item.jurisdiction}</td>
-                  <td className='py-2 text-blue-600 underline'><a href={item.document}>view</a></td>
+                  <td className='py-2 text-blue-600 hover:cursor-pointer underline'><a target="_blank"  href={item.application}>view</a></td>
                   <td className={`py-2 ${item.status == 'accepted' ? "text-green-500" :item.status == 'rejected'? "text-red-500" : "text-blue-500" }`}>{item.status} </td>
                 </tr>
               ))
