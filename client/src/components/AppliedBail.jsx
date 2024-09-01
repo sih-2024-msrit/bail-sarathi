@@ -1,13 +1,19 @@
-import React from 'react'
 import React, { useState, useEffect } from 'react';
 import { IoIosSearch } from "react-icons/io";
 import ReactPaginate from 'react-paginate';
-import data from "./testing.json";
+// import data from "./testing.json";
+import { bailoutEndpoints } from '../services/api';
+import { apiConnector } from '../services/apiConnector';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser } from '../slices/userSlice';
+import toast from 'react-hot-toast';
+const {LAWYER_BAIL_API}=bailoutEndpoints
 
-
-const AppliedBail = () => {
+const AppliedBail = React.forwardRef((props,ref) => {
     const itemsPerPage = 8;  
-
+    const [data,setData]=useState([]);
+    const dispatch=useDispatch();
+    const {user}=useSelector((state)=>state.user)
     function formatDate(date) {
       const d = new Date(date);
       const day = String(d.getDate()).padStart(2, '0');
@@ -21,6 +27,7 @@ const AppliedBail = () => {
   
     useEffect(() => {
       
+
       const timeoutId = setTimeout(() => {
         const filteredResults = data.filter(item =>
           item.applicationNo.toLowerCase().includes(searchQuery.toLowerCase())
@@ -31,6 +38,46 @@ const AppliedBail = () => {
   
       return () => clearTimeout(timeoutId);
     }, [searchQuery]); 
+    console.log("DATA:",data);
+
+    React.useImperativeHandle(ref,()=>({
+      childFunction:async()=>{
+        try{
+        
+          const response=await apiConnector("POST",LAWYER_BAIL_API,{license:user?.license});
+          if(!response?.data?.success){
+            throw new Error("couldnt get bail applications for the lawyer")
+          }
+          console.log("RESPONSE:",response);
+          setData(response?.data?.bailData);
+         
+        }
+        catch(err){
+          console.log("DATA FETCH API ERROR:",err)
+  
+        }
+      }
+    }))
+    const fetchData=async()=>{
+        
+      try{
+        
+        const response=await apiConnector("POST",LAWYER_BAIL_API,{license:user?.license});
+        if(!response?.data?.success){
+          throw new Error("couldnt get bail applications for the lawyer")
+        }
+        console.log("RESPONSE:",response);
+        setData(response?.data?.bailData);
+       
+      }
+      catch(err){
+        console.log("DATA FETCH API ERROR:",err)
+
+      }
+    }
+    useEffect(()=>{
+    fetchData();
+    },[])
   
     // Determine the current items to display
     const endOffset = itemOffset + itemsPerPage;
@@ -81,13 +128,13 @@ const AppliedBail = () => {
               </tr>
             </thead>
             <tbody>
-              {currentItems.length > 0 ? (
-                currentItems.map((item, index) => (
+              {data.length > 0 ? (
+                data.map((item, index) => (
                   <tr key={index} className='text-center border-b-2 border-gray-400'>
                     <td className='py-2'>{item.applicationNo}</td>
                     <td className='py-2'>{formatDate(Date.now())}</td>
                     <td className='py-2'>{item.jurisdiction}</td>
-                    <td className='py-2 text-blue-600 underline'><a href={item.document}>view</a></td>
+                    <td className='py-2 text-blue-600 underline'><a className="hover:cursor-pointer" href={item.application}>view</a></td>
                     <td className='py-2 text-green-500'>{item.status}</td>
                   </tr>
                 ))
@@ -121,5 +168,5 @@ const AppliedBail = () => {
       </div>
     );
 }
-
+)
 export default AppliedBail

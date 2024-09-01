@@ -34,8 +34,8 @@ const Login = () => {
         throw new Error("NHI CHALA")
       }
       console.log("RESPONSE DATA",response?.data)
-      setToken(response?.data?.token)
-      setUser(response?.data?.user)
+      dispatch(setToken(response?.data?.token))
+      dispatch(setUser(response?.data?.user))
       toast.success("You are logged in ")
       navigate("/apply-bail")
     }

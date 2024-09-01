@@ -29,18 +29,30 @@ if parent_dir not in sys.path:
     sys.path.append(parent_dir)
 
 from langchain.document_loaders import PyPDFLoader
+from PyPDF2 import PdfReader
 
 def pdf_to_text(pdf):
-  loader = PyPDFLoader(pdf)
-  pages = loader.load()
-  text_content = [page.page_content for page in pages]
-  return "\n".join(text_content)
+    print("PDF YAHA HAI:",pdf)
+    print("MAI AAYI HU")
+    # creating a pdf reader object
+    
+    reader = PdfReader(pdf)
+    print("MAI NIKAL LI HU")
+    # printing number of pages in pdf file
+    print(len(reader.pages))
+
+    # getting a specific page from the pdf file
+    page = reader.pages[0]
+    print("WANNA BE MY CHAMMAK CHALLO")
+    # extracting text from page
+    text = page.extract_text()
+    return str(text)
 
 app = Flask(__name__)
 
 #paths
-path_ipc_vector_store = "server/Bail_Saarathi/vector_database/IPC_Sections_VectorEmbeddings"
-path_case_vector_store="server/Bail_Saarathi/vector_database/Case_Files_VectorEmbeddings"
+path_ipc_vector_store = "server/Bail_Saarathi/vector_database/IPC_Sections_VectorEmbeddings/"
+path_case_vector_store="server/Bail_Saarathi/vector_database/Case_Files_VectorEmbeddings/"
 
 #inputs
 bail="Case Record Case Title: The State vs. [Defendant's Name]  Case Number: [To Be Assigned]  Date of Incident: 12:00 AM, [Date]  Location: [Shop Name], Bangalore  Charges: Pity Theft, Robbery  Defendant: [Defendant's Name]  Address: [Defendant's Address] Occupation: [Defendant's Occupation] Age: [Defendant's Age] Gender: [Defendant's Gender] Legal Representation: [Lawyer's Name]  Chargesheet 1. Overview of the Incident:  On the night of [Date], at approximately 12:00 AM, the defendant was allegedly involved in a criminal act at [Shop Name], located in Bangalore. The incident involved the following charges:  Pity Theft: Alleged petty theft committed by the defendant. Robbery: The defendant is charged with robbery, which involved using force or intimidation to unlawfully take property from the shop. 2. Description of Charges:  a. Pity Theft:  Details of Theft: The defendant is accused of unlawfully taking small items from the shop without the consent of the shop owner. The items stolen include [List of Stolen Items, if known]. Evidence: Surveillance footage from the shop, witness testimonies, and recovered stolen items (if any). b. Robbery:  Details of Robbery: The defendant is alleged to have forcibly taken property from the shop, threatening or using intimidation against the shopkeeper or any employees present at the time. Evidence: Eyewitness accounts, surveillance footage, and any physical evidence related to the force or intimidation used. 3. Witnesses:  Witness 1: [Name, Address, Contact Information] – Eyewitness to the incident. Witness 2: [Name, Address, Contact Information] – Employee at the shop who observed the defendant’s actions. 4. Evidence:  Surveillance Footage: Video recordings showing the defendant’s actions during the incident. Physical Evidence: Items recovered from the defendant that were stolen from the shop (if applicable). Witness Statements: Statements from individuals who witnessed the crime or were present at the scene. 5. Charges Under Relevant Sections:  Pity Theft: IPC Section 378 (Theft) and any applicable local legal provisions. Robbery: IPC Section 390 (Robbery) and IPC Section 392 (Punishment for Robbery). 6. Investigation Summary:  The investigation was conducted by [Investigation Officer's Name], who gathered evidence, interviewed witnesses, and compiled the case details. The collected evidence supports the charges of petty theft and robbery.  7. Next Steps:  Court Hearing: The case is scheduled for a preliminary hearing on [Date]. Bail Status: The defendant's bail status is [Bail Granted/Denied]. Further Proceedings: The case will proceed to trial where the evidence will be presented, and a verdict will be determined based on the charges and the evidence provided. Case Prepared By: [Investigating Officer's Name] [Designation] [Date]  Approved By: [Senior Officer's Name] [Designation] [Date]  Note: This chargesheet is prepared for the purpose of formal legal proceedings and is subject to further review by the court. The defendant is presumed innocent until proven guilty in a court of law."
@@ -55,6 +67,14 @@ def run_llm():
    output=Previous_Cases_With_Summary_Fetch(bail_application_2,path_case_vector_store)
    print("OUTPUT:",output)
    return jsonify(output=output)
+
+
+@app.route("/pdf-extract",methods=['POST'])
+def pdf_extracter():
+    pdfFile=request.json.get('pdf')
+    print("KASLJDKLASJLD:KJAS:KLDJKLASJKLDJKLAJSDKLJAS:KLDJ:KLASJD:KLJASKL")
+    textData=pdf_to_text(pdfFile)
+    return str(textData)
 
 
 @app.route("/bail-summary",methods=['POST'])
@@ -89,6 +109,8 @@ def criminal_records_generator():
     print("OUTPUT:",output)
     return jsonify(output)
 #cr
+
+
 
 if __name__ == '__main__':
     app.run(port=5000)
