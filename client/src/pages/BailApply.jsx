@@ -90,9 +90,9 @@ const BailApply = () => {
 
                     <div className='max-w-2xl'>
                         <h2>Case Details:</h2>
-                        <div className='flex flex-row mx-auto gap-2'>
-                            <div onClick={() => setShowWrite(true)} className={`px-3 py-1.5 ${(showWrite) ? "text-black border-black": "text-gray-600 border-gray-600"}  border w-48 inline`}>Write Case Details</div>
-                            <div onClick={() => setShowWrite(false)} className={`px-3 py-1.5 ${showWrite ? "text-gray-600 border-gray-600": "text-black border-black"} border-black border w-48 inline`}>Upload Case Details</div>
+                        <div className='flex flex-row mt-2 mb-2 mx-auto gap-2'>
+                            <div onClick={() => setShowWrite(true)} className={`px-3 py-1.5 hover:cursor-pointer ${(showWrite) ? "text-black border-black": "text-gray-600 border-gray-600"}  border w-48 inline`}>Write Case Details</div>
+                            <div onClick={() => setShowWrite(false)} className={`px-3 py-1.5 hover:cursor-pointer ${showWrite ? "text-gray-600 border-gray-600": "text-black border-black"} border-black border w-48 inline`}>Upload Case Details</div>
                         </div>
 
                         {/*text option*/}
