@@ -26,13 +26,14 @@ const {
         
         toast.success("Login Successful")
         dispatch(setToken(response.data.token))
-        const userImage = response.data?.user?.image
-          ? response.data.user.image
-          : `https://api.dicebear.com/5.x/initials/svg?seed=${response.data.user.name}`
-        dispatch(setUser({ ...response.data.user, image: userImage }))
         localStorage.setItem("token", JSON.stringify(response.data.token))
         localStorage.setItem("user", JSON.stringify(response.data.user));
-        navigate("/feed")
+        if(response.data.user.accountType == "admin") {
+          navigate("/admin")
+        }
+        else {
+          navigate("/bail-apply")
+        }
       } catch (error) {
         console.log("LOGIN API ERROR............", error)
         toast.error(`Login Failed ${error.message}`)

@@ -29,7 +29,7 @@ const BailSummary = () => {
   useEffect(() => {
     const fetchBailSummary = async () => {
       try {
-        const formData = { flag: 'bs', applicationNo };
+        const formData = { flag: 'pc', applicationNo };
         const response = await dispatch(bailSummary(formData));
         console.log("RESPONSE:",response);
         setData(prevData => ({
