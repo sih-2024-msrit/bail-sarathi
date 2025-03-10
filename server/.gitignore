@@ -27,3 +27,24 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+vscode
+.vscode
+.idea
+.idea/
+venv
+*/__pycache__
+
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.sql
+*.log
+*.cache
+*.out
+*.pid
+*.pidlock
+*.pkl

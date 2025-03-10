@@ -1,0 +1,57 @@
+# Node.js (MERN stack)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+dist/
+build/
+
+# React build artifacts
+build/
+
+# Python (Flask)
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+env/
+venv/
+instance/
+.webassets-cache
+*.db
+*.sqlite
+
+# Flask config and secret files
+config.py
+instance/
+*.env
+*.ini
+
+# Flask migrations
+migrations/
+
+# RAG model files
+*.pth
+*.bin
+*.ckpt
+*.h5
+*.hdf5
+checkpoint/
+logs/
+
+# Logs
+*.log
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE files (if using VS Code, PyCharm, etc.)
+.vscode/
+.idea/
+
+# Environment files
+.env
+.env.*
+__pycache__/

@@ -33,12 +33,27 @@ const BailoutSchema=new mongoose.Schema({
     judgeLicense: {
         type:String,
         required:true,
+    },
+    bailSummary: {
+        type:String,
+        required:true,
+    },
+    previousCase: {
+        type:String,
+        required:true,
+    },
+    ipcSection: {
+        type:String,
+        required:true,
+    },
+    criminalCase: {
+        type:String,
+        required:true,
     }
     },
     {
         timestamps: true
     }
 );
-
 
 module.exports=mongoose.model("bailout",BailoutSchema);
