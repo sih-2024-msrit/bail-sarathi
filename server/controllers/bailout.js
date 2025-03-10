@@ -1,5 +1,5 @@
 const Bailout = require('../models/bailout');
-const { admin, bucket } = require("../config/firebaseAdmin");
+// const { admin, bucket } = require("../config/firebaseAdmin");
 const fs = require("fs");
 const path = require("path");
 const axios = require('axios')
@@ -8,6 +8,9 @@ const pdfParse=require('pdf-parse');
 const mailSender = require('../utils/mailSender');
 const statusUpdate = require('../mails/statusUpdate');
 const user = require('../models/user');
+const { Client, Storage, ID, InputFile } = require('node-appwrite');
+
+
 
 async function sendmail(email, status, applicationNo, judgeLicense) {
     try{
@@ -20,40 +23,85 @@ async function sendmail(email, status, applicationNo, judgeLicense) {
     }
 }
 
-const uploadToFirebase = (file, prefix) => {
-    return new Promise((resolve, reject) => {
-        const fileName = `${prefix}/${Date.now()}-${file.name}`;
-        const fileUpload = bucket.file(fileName);
-        const blobStream = fileUpload.createWriteStream({
-            metadata: {
-                contentType: file.mimetype
-            }
-        });
+// const uploadToFirebase = (file, prefix) => {
+//     return new Promise((resolve, reject) => {
+//         const fileName = `${prefix}/${Date.now()}-${file.name}`;
+//         const fileUpload = bucket.file(fileName);
+//         const blobStream = fileUpload.createWriteStream({
+//             metadata: {
+//                 contentType: file.mimetype
+//             }
+//         });
 
-        blobStream.on('error', (error) => {
+//         blobStream.on('error', (error) => {
+//             reject(error);
+//         });
+
+//         blobStream.on('finish', async () => {
+//             try {
+//                 await fileUpload.makePublic();
+//                 const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+//                 resolve(url);
+//             } catch (error) {
+//                 reject(error);
+//             }
+//         });
+
+//         // Read the file from the temporary directory and upload
+//         fs.createReadStream(file.tempFilePath).pipe(blobStream);
+//     });
+// };
+
+// for appwrite
+
+exports.uploadToAppwrite = async (file) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            const client = new Client()
+                .setEndpoint(process.env.APPWRITE_ENDPOINT)
+                .setProject(process.env.APPWRITE_PROJECT_ID)
+                .setKey(process.env.APPWRITE_API_KEY);
+            
+            const storage = new Storage(client);
+            
+            if (!file || !file.tempFilePath) {
+                return reject(new Error("Invalid file input"));
+            }
+
+            // Read file as a buffer
+            const fileBuffer = fs.readFileSync(file.tempFilePath);
+            
+            // Create a File object
+            const fileObject = new File([fileBuffer], file.name, { type: file.mimetype });
+            
+            const response = await storage.createFile(
+                process.env.APPWRITE_BUCKET_ID,
+                ID.unique(),
+                fileObject
+            );
+
+            const fileUrl = storage.getFileView(process.env.APPWRITE_BUCKET_ID, response.$id);
+            resolve(fileUrl);
+        } catch (error) {
             reject(error);
-        });
-
-        blobStream.on('finish', async () => {
-            try {
-                await fileUpload.makePublic();
-                const url = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-                resolve(url);
-            } catch (error) {
-                reject(error);
-            }
-        });
-
-        // Read the file from the temporary directory and upload
-        fs.createReadStream(file.tempFilePath).pipe(blobStream);
+        }
     });
 };
+
+
+
 
 exports.createApplication = async (req, res) => {
     try {
         const { jurisdiction, license, judgeLicense } = req.body;
         let caseDetails = req.body.caseDetails;
         const { application } = req.files;
+
+        console.log("REQUEST FILES:", req.fies);
+        console.log("Application File:", application);
+        console.log("Application File Type:", typeof application);
+        console.log("Application File Properties:", application ? Object.keys(application) : "undefined");
+
     
         if (!jurisdiction || !application || !license || !judgeLicense) {
             return res.status(400).json({
@@ -80,31 +128,13 @@ exports.createApplication = async (req, res) => {
             const cdtempPath = caseDetailsFile.tempFilePath;
             const pdfBuffer = fs.readFileSync(cdtempPath);
             const pdfData = await pdfParse(pdfBuffer);
-            const textResponse = pdfData.text;
+            const caseDetails = pdfData.text;
     
-            console.log("Text Response:", textResponse);
-    
-            const applicationPdfUrl = await uploadToFirebase(application, 'applications');
-            const applicationNo = Date.now();
-    
-            const bailApply = await Bailout.create({
-                applicationNo,
-                jurisdiction,
-                caseDetails: textResponse,
-                application: applicationPdfUrl,
-                lawyer: license,
-                judgeLicense,
-                applicationText
-            });
-    
-            return res.status(200).json({
-                success: true,
-                message: "Bail Applied successfully"
-            });
-    
-        } else {
-            // caseDetails is text --> store in db
-            const applicationPdfUrl = await uploadToFirebase(application, 'applications');
+            console.log("Text Response:", caseDetails);
+        }
+        console.log("yahan tak ho  gaya------------");
+           // caseDetails is text --> store in db
+            const applicationPdfUrl = await this.uploadToAppwrite(application);
             const applicationNo = Date.now();
     
 
@@ -166,7 +196,6 @@ exports.createApplication = async (req, res) => {
                 success: true,
                 message: "Bail Applied successfully"
             });
-        }
     
     } catch (err) {
         console.error("Error while creating application", err);
