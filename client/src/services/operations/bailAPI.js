@@ -73,8 +73,8 @@ export function bailSummary(data) {
             if (!response.data.success) {
                 throw new Error(response.data.message)
             }
-        
-            return response?.data?.summary;
+            
+            return response?.data?.bailDetails;
         } catch (error) {
             console.log("BAILOUT SUMMARY API ERROR............", error)
             toast.error(`Bail Summary Failed ${error.message}`)

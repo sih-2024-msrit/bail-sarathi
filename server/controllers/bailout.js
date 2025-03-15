@@ -250,7 +250,7 @@ exports.getJudgeBail=async(req,res)=>{
             })
         }
 
-        let bailData=await Bailout.find({judgeLicense});
+        let bailData=await Bailout.find({judgeLicense}, {createdAt: 1, applicationNo: 1, status: 1, jurisdiction: 1, lawyer: 1, application: 1});
         
         if(!bailData){
             bailData=[]
@@ -318,7 +318,6 @@ exports.changeStatus = async (req, res) => {
 exports.bailSummary = async (req, res) => {
     try {
         const { applicationNo} = req.body;
-        //flag-> bs,pc,
 
         if (!applicationNo) {
             return res.status(400).json({

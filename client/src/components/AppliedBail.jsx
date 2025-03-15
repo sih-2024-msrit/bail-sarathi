@@ -33,7 +33,7 @@ const AppliedBail = React.forwardRef((props,ref) => {
         setFilteredData(filteredResults);
         setItemOffset(0); 
       }, 300); 
-  
+
       return () => clearTimeout(timeoutId);
     }, [searchQuery]); 
     console.log("DATA:",data);
@@ -148,10 +148,12 @@ const AppliedBail = React.forwardRef((props,ref) => {
                 filterAppData.map((item, index) => (
                   <tr key={index} className='text-center border-b-2 border-gray-400'>
                     <td className='py-2'>{item.applicationNo}</td>
-                    <td className='py-2'>{formatDate(Date.now())}</td>
-                    <td className='py-2'>{item.jurisdiction}</td>
-                    <td className='py-2 text-blue-600 underline'><a target="_blank"  className="hover:cursor-pointer" href={item.application}>view</a></td>
-                    <td  className={`py-2 ${item.status == 'accepted' ? "text-green-500" :item.status == 'rejected'? "text-red-500" : "text-blue-500" }`}>{item.status}</td>
+                    <td className='py-2'>{item.createdAt.substr(0,10) + " " +  item.createdAt.substr(11,5)}</td>
+                  <td className='py-2'>{item.jurisdiction.charAt(0).toUpperCase() + item.jurisdiction.slice(1)}</td>
+                  <td className='py-2 text-blue-600 hover:cursor-pointer underline'><a target="_blank" rel="noreferrer"  href={item.application}>View</a></td>
+                  <td className={`py-2 ${item.status === 'accepted' ? "text-green-500" :item.status === 'rejected'? "text-red-500" : "text-blue-500" }`}>
+                    {item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                  </td>
                   </tr>
                 ))
               ) : (
