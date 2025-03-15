@@ -91,7 +91,7 @@ exports.login=async(req,res)=>{
         return res.status(404).json({
           success:false,
           message:"All fields are required"
-        })
+        }) 
       }
   
       //check by email
