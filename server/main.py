@@ -15,6 +15,8 @@ from scripts.chatbot.chatbot import *
 from config import ai
 from flask_cors import CORS, cross_origin
 
+
+
 from flask_mail import Mail
 # # Add the parent directory to the sys.path
 # parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -44,10 +46,17 @@ from flask_mail import Mail
 app = Flask(__name__)
 app.debug = True
 
-CORS(app)
 
 app.register_blueprint(auth_bp)
 app.register_blueprint(bailout_bp)
+
+
+CORS(app, resources={r"/*": {
+    "origins": ["http://localhost:3000", "http://127.0.0.1:3000"],
+    "methods": ["GET", "POST", "PUT", "OPTIONS"],
+    "allow_headers": ["Content-Type", "Authorization"],
+    "supports_credentials": True 
+}})
 
 app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
 

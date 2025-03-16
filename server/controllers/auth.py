@@ -7,15 +7,21 @@ from Crypto.Cipher import AES
 from dotenv import load_dotenv
 from models.model import User
 from models.model import License
+from flask_cors import CORS, cross_origin
+from flask import Response, current_app
+
 
 load_dotenv()  # Load environment variables from .env file
 
 auth_bp = Blueprint('auth', __name__)
 
+# CORS(auth_bp)
+
 # Login route
 @auth_bp.route('/api/login', methods=['POST'])
 def login():
     try:
+        print("Login route")
         # Get data
         data = request.json
         license_no = data.get('license')
