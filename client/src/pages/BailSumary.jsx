@@ -61,16 +61,16 @@ const BailSummary = () => {
         <div className='w-[90%] md:w[80%] dm-serif-displays lg:w-[70%] grid md:grid-cols-2 lg:grid-cols-4 h-fit border border-black mb-3 p-4 mx-auto'>
           {/* <div className="flex flex-col md:flex-row gap-x-10"> */}
             <div className=''> <span className='font-semibold'>Application</span> : {data?.applicationNo} </div>
-            <div className=''> <span className='font-semibold'>Date </span> : {data.createdAt.substr(0,10) + " " +  data.createdAt.substr(11,5)} </div>
-            <div className=''> <span className='font-semibold'>Jurisdiction </span> : {data?.jurisdiction.charAt(0).toUpperCase() + data.jurisdiction.slice(1)} </div>
-            <div className=''> <span className='font-semibold'>Status </span> : {data?.status.charAt(0).toUpperCase() + data?.status.slice(1)} </div>
+            <div className=''> <span className='font-semibold'>Date </span> : {data?.createdAt?.substr(0,10) + " " +  data?.createdAt?.substr(11,5)} </div>
+            <div className=''> <span className='font-semibold'>Jurisdiction </span> : {data?.jurisdiction?.charAt(0).toUpperCase() + data?.jurisdiction?.slice(1)} </div>
+            <div className=''> <span className='font-semibold'>Status </span> : {data?.status?.charAt(0)?.toUpperCase() + data?.status?.slice(1)} </div>
         </div>
 
 
         {/* summary */}
         <div className='gap-y-5 w-[90%] dm-serif-display md:w[80%] lg:w-[70%]  h-fit border border-black p-4 mx-auto'>
           <div className='flex flex-row gap-4 justify-items-start mb-4'>
-            {topics.map((top, index) => (
+            {topics?.map((top, index) => (
               <button
                 key={index}
                 onClick={() => setTopic(index)}

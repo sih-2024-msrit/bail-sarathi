@@ -13,9 +13,9 @@ from scripts.previouscaseswithsummary import *
 from scripts.chatbot.chatbot import *
 
 from config import ai
+from flask_cors import CORS, cross_origin
 
-
-
+from flask_mail import Mail
 # # Add the parent directory to the sys.path
 # parent_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 # if parent_dir not in sys.path:
@@ -44,13 +44,27 @@ from config import ai
 app = Flask(__name__)
 app.debug = True
 
+CORS(app)
+
 app.register_blueprint(auth_bp)
 app.register_blueprint(bailout_bp)
 
 app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
 
+app.config.update(
+    MAIL_SERVER=os.getenv('MAIL_HOST'),
+    MAIL_PORT=os.getenv('MAIL_PORT'),
+    MAIL_USE_TLS=True,
+    MAIL_USERNAME=os.getenv('MAIL_USER'),
+    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
+    MAIL_DEFAULT_SENDER=('Bail Sarathi', os.getenv('MAIL_USER'))
+)
+
+
 # Initialize PyMongo
 init_db(app)
+mail = Mail(app)
+
 
 UPLOAD_FOLDER = 'temp_uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)

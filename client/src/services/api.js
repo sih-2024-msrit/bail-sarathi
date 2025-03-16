@@ -13,11 +13,11 @@ export const summaryEndpoints = {
 export const bailoutEndpoints = {
     SEND_BAILOUT: BASE_URL + "/bailout/bailout",
     GET_BAILOUT_STATUS: BASE_URL + "/bailout/bailout-status",
-    BAIL_APPLY_API:BASE_URL+ "/bailout/bail-apply",
+    BAIL_APPLY_API:"http://localhost:5000/api/create-application",
     TEST_FLASK_API:BASE_URL + "/bailout/test-flask",
     BAIL_SUMMARY_API:BASE_URL + "/bailout/bail-summary",
     LAWYER_BAIL_API:BASE_URL + "/bailout/get-lawyer-bails",
     JUDGE_BAIL_API:BASE_URL + "/bailout/get-judge-bails",
     TEST_CHATBOT_API:BASE_URL + "/bailout/test-chatbot",
-    STATUS_CHANGE:BASE_URL + "/bailout/status-change"
+    STATUS_CHANGE:"http://localhost:5000/api/change-status"
 }

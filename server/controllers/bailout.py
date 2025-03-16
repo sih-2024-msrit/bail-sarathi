@@ -15,8 +15,8 @@ from appwrite.client import Client
 from appwrite.services.storage import Storage
 from appwrite.id import ID
 from appwrite.input_file import InputFile
-import datetime
-
+from datetime import datetime
+from flask import current_app
 import sys
 
 #scripts imports
@@ -30,6 +30,9 @@ from config import ai
 
 from config.database import mongo
 from pymongo import MongoClient
+
+from flask_cors import CORS
+
 
 client = MongoClient(os.getenv("MONGODB_URL"))
 db = client["test"]
@@ -47,6 +50,9 @@ from PyPDF2 import PdfReader
 
 
 bailout_bp = Blueprint('bailout', __name__)
+
+
+CORS(bailout_bp)
 
 
 def pdf_to_text(pdf):
@@ -78,7 +84,7 @@ bail_application="Case RECORD: Case Title: The State vs. [Defendant's Name]  Cas
 bail_application_2="Case Record: Petty Robbery and Theft Case Number: CR-2457/2024 Date: August 31, 2024 Jurisdiction: Bengaluru, Karnataka, India Defendant Information: Name: Rajesh Kumar Age: 24 Gender: Male Address: No. 12, 4th Cross, Rajajinagar, Bengaluru, Karnataka Occupation: Unemployed Incident Details: Date of Incident: August 25, 2024 Time of Incident: Approximately 11:30 PM Location: Koramangala Market, Bengaluru, Karnataka Summary of Charges: Section 379 (Theft) of the Indian Penal Code (IPC): Rajesh Kumar is accused of stealing a mobile phone from the handbag of a woman, identified as Priya Mehta, while she was shopping in the market. Section 392 (Robbery) of the IPC: Rajesh Kumar allegedly used force to snatch a wallet from an elderly man, identified as Ramesh Verma, in the same market on the same evening. The wallet contained Rs. 1,200 in cash and some personal identification cards. Details of the Crime: Theft Incident: Witnesses reported that Rajesh Kumar stealthily approached Priya Mehta from behind and swiftly removed her mobile phone from her handbag while she was distracted looking at merchandise. Priya noticed her phone was missing moments later and alerted the nearby shopkeeper, but Rajesh had already blended into the crowd. Robbery Incident: Later the same evening, Rajesh Kumar was seen approaching Ramesh Verma, an elderly man, who was purchasing fruits. Rajesh forcefully grabbed Ramesh’s wallet from his back pocket. When Ramesh tried to resist, Rajesh pushed him to the ground, causing minor injuries. Rajesh then fled the scene. Arrest and Investigation: Date of Arrest: August 26, 2024 Arresting Officer: Sub-Inspector Deepak Singh, Koramangala Police Station Evidence Collected: CCTV footage from a nearby store showing Rajesh Kumar snatching the wallet. The stolen mobile phone was recovered from Rajesh's possession upon arrest. Rs. 900 of the stolen cash was recovered, while Rs. 300 had allegedly been spent. Witness Statements: Priya Mehta (Theft Victim): “I felt someone brush against me, but I thought it was just a crowded market. A few minutes later, I realized my phone was gone. I saw a man walking away hurriedly but couldn't see his face clearly.” Ramesh Verma (Robbery Victim): “I was paying for fruits when I felt a sharp tug at my pocket. Before I could react, I was pushed to the ground. The young man took my wallet and ran. I tried to call for help, but he was too quick.” Shopkeeper (Eyewitness): “I saw a young man behaving suspiciously near the lady’s bag. After a few seconds, he swiftly moved away. Later, I saw the same person pushing an elderly man and snatching his wallet.” Defendant’s Statement: Rajesh Kumar: “I admit to taking the mobile phone because I was desperate and needed money. I did not intend to hurt anyone. I’m truly sorry for my actions.” Legal Representation: Defense Attorney: Advocate Manish Agarwal Prosecutor: Advocate Anjali Deshmukh Status of the Case: Court Hearing Date: September 5, 2024 Current Status: Rajesh Kumar is in judicial custody awaiting trial. Potential Sentencing: Theft (Section 379 IPC): Up to 3 years of imprisonment, or fine, or both. Robbery (Section 392 IPC): Imprisonment for a term which may extend to 10 years and shall also be liable to fine. Notes: The case is classified as petty robbery and theft due to the low value of stolen goods and lack of severe harm to victims. The court will consider the defendant's intent, circumstances, and past criminal record, if any, when determining the sentence."
 bail_summary="DEVILISH ASSHOLES BAIL APPLICATION IN THE [NAME OF COURT] Bail Application No. [Application Number] In the matter of: [Applicant's Name], S/o [Father’s Name], R/o [Address], Applicant Versus State of [State Name], Represented by [Name of the Prosecutor/Police Station] Respondent APPLICATION FOR REGULAR BAIL To, The Honorable Judge, [Name of the Court], [Address of the Court] Date: [Date] Subject: Application for Regular Bail Respected Sir/Madam, I, [Applicant's Name], am the applicant in the above-referenced case. I am seeking regular bail in connection with the charges of rape and murder brought against me. I respectfully submit the following grounds for your consideration: Claim of Innocence: I am steadfast in my claim of innocence concerning the charges filed against me. Despite the serious nature of these charges, I maintain that I am not guilty and am committed to proving my innocence through the legal process. Acknowledgment of Past Incidents: It is acknowledged that there have been previous legal issues in my past. However, I wish to emphasize that these were not related to the current charges and do not reflect the nature of the present allegations. I have learned from past experiences and have been striving to make positive changes in my life. Family Responsibility: I am the sole breadwinner for my family. My continued detention has placed a severe financial burden on them. They rely on me for their daily needs, and my absence is causing them undue hardship. Commitment to Cooperation: I assure the court that I will fully cooperate with all legal proceedings and adhere to any conditions imposed. I am committed to attending all court hearings and assisting with the investigation as required. No Interference Assurance: I guarantee that I will not interfere with any evidence or attempt to influence witnesses. I am committed to upholding the integrity of the legal process and ensuring that the judicial system operates without obstruction. Appeal for Compassion: Given the circumstances, I humbly request the court to consider my application for bail. Granting bail would not only allow me to support my family but also enable me to actively participate in my defense. I respectfully request that the Honorable Court grant me regular bail. I am willing to comply with any conditions set by the court and provide necessary sureties to ensure my presence for all proceedings. Yours sincerely, [Applicant's Name] S/o [Father’s Name] R/o [Address] Contact Number: [Phone Number] Email: [Email Address] Enclosures: Copy of the FIR Copy of the charge sheet Proof of address Affidavit regarding family dependency Any other relevant documents"
 
-
+from flask_mail import Mail, Message
 
 # Configure upload folder
 
@@ -90,17 +96,40 @@ def get_appwrite_client():
     client.set_key(os.environ.get('APPWRITE_API_KEY'))
     return client
 
+
+def send_mail(recipient, subject, body):
+    try:
+        msg = Message(
+            subject=subject,
+            recipients=[recipient],
+            body=body,
+            sender=current_app.config['MAIL_DEFAULT_SENDER']
+        )
+        print("------insde send mail-----------")
+        mail = current_app.extensions['mail']
+        print("------insde send mail 2-----------", mail)
+        mail.send(msg)
+        return "Email sent successfully"
+    except Exception as e:
+        print(f"Failed to send email: {e}")
+        raise e
+
+
+
 def send_status_email(email, status, application_no, judge_license):
     try:
+        print("------inside email 1------------")
         mail_response = send_mail(
             email, 
             "Status Update", 
             generate_status_update(status, application_no, judge_license)
         )
+        print("------inside email 2------------")
         print("Email sent successfully:", mail_response)
     except Exception as error:
         print("Error occurred while sending mails:", error)
         raise error
+
 
 def upload_to_appwrite(file):
     try:
@@ -341,7 +370,9 @@ def get_judge_bail():
 @bailout_bp.route('/api/change-status', methods=['POST'])
 def change_status():
     try:
+        print("--------------------------------")
         data = request.json
+        print("REQUEST BODY:", data)
         application_no = data.get('applicationNo')
         status = data.get('status')
         print("REQUEST BODY:", data)
@@ -354,7 +385,8 @@ def change_status():
         
         print("STATUS CHANGE ENTRY")
         
-        bail_details = bailout.find_one(application_no=application_no)
+        bail_details = bailout.find_one({"applicationNo":application_no})
+        print("BAIL DETAILS:", bail_details)
         if not bail_details:
             return jsonify({
                 'success': False,
@@ -363,19 +395,25 @@ def change_status():
         
         print("STATUS CHANGE SEARCH")
         
-        bail_details.status = status.lower()
-        bail_details.save()
-        
-        user_detail = user.find_one(license=bail_details.lawyer)
+        bail_details['status'] = status.lower()
+        result = bailout.update_one(
+            {"application_no": application_no},
+            {"$set": {"status": status.lower(), "updated_at": datetime.utcnow()}}
+        )
+
+        print("STATUS CHANGE SAVED", result)
+        user_detail = users.find_one({"license" : bail_details['lawyer']})
         print("user", user_detail)
-        
+        print("---before email---------")
         # Send email notification
         send_status_email(
-            user_detail.email, 
+            user_detail['email'],
             status, 
-            bail_details.application_no, 
-            bail_details.judge_license
+            bail_details['applicationNo'], 
+            bail_details['judgeLicense']
         )
+
+        print("----after email---------")
         
         return jsonify({
             'success': True,
