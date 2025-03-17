@@ -33,7 +33,6 @@ from pymongo import MongoClient
 
 from flask_cors import CORS
 
-
 client = MongoClient(os.getenv("MONGODB_URL"))
 db = client["test"]
 users = db["users"]
@@ -135,15 +134,15 @@ def upload_to_appwrite(file):
     try:
         client = get_appwrite_client()
         storage = Storage(client)
-        
+        print("-------inside apprite upload--------")
         if not file:
             raise ValueError("Invalid file input")
 
         # Save the file temporarily
         filename = secure_filename(file.filename)
-        temp_path = os.path.join(bailout_bp.config['UPLOAD_FOLDER'], filename)
+        temp_path = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
         file.save(temp_path)
-        
+        print("-----------------TEMP PATH:")
         # Upload to Appwrite
         with open(temp_path, 'rb') as file_data:
             response = storage.create_file(
@@ -151,16 +150,16 @@ def upload_to_appwrite(file):
                 file_id=ID.unique(),
                 file=InputFile.from_path(temp_path)
             )
-        
+        print("RESPONSE:")
         # Clean up temp file
         os.remove(temp_path)
-        
+        print("-------------remvoed-------------")
         # Get the file URL
         file_url = storage.get_file_view(
             bucket_id=os.environ.get('APPWRITE_BUCKET_ID'),
             file_id=response['$id']
         )
-        
+        print("FILE URL:")
         return file_url
     except Exception as e:
         print(f"Error uploading to Appwrite: {str(e)}")
@@ -192,15 +191,16 @@ def pdf_extracter():
 @bailout_bp.route('/api/create-application', methods=['POST'])
 def create_application():
     try:
+        print("-----------inside app 1-----------")
         # Get form data
         jurisdiction = request.form.get('jurisdiction')
         license = request.form.get('license')
         judge_license = request.form.get('judgeLicense')
         case_details_text = request.form.get('caseDetails')
-        
+        print("-----------inside app 2-----------")
         # Get files
         application_file = request.files.get('application')
-        
+        print("-----------inside app 3-----------")
         print("REQUEST FILES:", request.files)
         print("Application File:", application_file)
         
@@ -211,13 +211,21 @@ def create_application():
             }), 400
         
         # Process application PDF
-        application_buffer = io.BytesIO(application_file.read())
-        application_text_data = pdf_parser.load(application_buffer)
-        application_text = application_text_data.text
         
+        # Assuming `application_file` is a file-like object (e.g., an uploaded file in Flask)
+        application_buffer = io.BytesIO(application_file.read())  # Convert to BytesIO
+        pdf_reader = PyPDF2.PdfReader(application_buffer)  # Load the PDF
+
+        # Extract text from all pages
+        application_text = ""
+        for page in pdf_reader.pages:
+            application_text += page.extract_text() + "\n"  # Extract text from each page
+
+        print(application_text)
+        print("-----------inside app 4-----------")
         # Reset file pointer for upload
         application_file.seek(0)
-        
+        print("-----------inside app 5-----------")
         # Process case details if it's a file
         if not case_details_text:
             case_details_file = request.files.get('caseDetails')
@@ -227,17 +235,23 @@ def create_application():
                     'message': "Case details file is required"
                 }), 400
             
-            case_details_buffer = io.BytesIO(case_details_file.read())
-            case_details_data = pdf_parser.load(case_details_buffer)
-            case_details_text = case_details_data.text
+            case_details_buffer = io.BytesIO(case_details_file.read())  # Convert to BytesIO
+            pdf_reader = PyPDF2.PdfReader(case_details_buffer)  # Load the PDF
+
+            # Extract text from all pages
+            case_details_text = ""
+            for page in pdf_reader.pages:
+                case_details_text += page.extract_text() + "\n"  # Extract text from each page
+
+            print(case_details_text)
             print("Text Response:", case_details_text)
         
         print("Processing completed ------------")
         
         # Upload application to Appwrite
         application_pdf_url = upload_to_appwrite(application_file)
-        application_no = int(datetime.datetime.now().timestamp() * 1000)
-        
+        application_no = int(datetime.now().timestamp() * 1000)
+        print("-----------inside app 6-----------")
         # Get bail summary from analysis service
         bail_summary = Bail_Reckoner_Summary(application_text,application_no,application_no)
         if not bail_summary:
@@ -278,17 +292,17 @@ def create_application():
         
         # Create bailout record
         bail_apply = bailout.create(
-            application_no=application_no,
+            applicationNo=application_no,
             jurisdiction=jurisdiction,
-            case_details=case_details_text,
+            caseDetails=case_details_text,
             application=application_pdf_url,
             lawyer=license,
-            judge_license=judge_license,
+            judgeLicense=judge_license,
             application_text=application_text,
-            bail_summary=bail_summary,
+            bailSummary=bail_summary,
             previous_case=previous_case,
-            ipc_section=ipc_section,
-            criminal_case=criminal_case
+            ipcSection=ipc_section,
+            criminalSCase=criminal_case
         )
         
         return jsonify({
