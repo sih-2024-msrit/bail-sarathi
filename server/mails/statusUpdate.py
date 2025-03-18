@@ -68,6 +68,7 @@ def generate_status_update(status, application_no, judge_license):
 
 <body>
   <div class="container">
+    <a href="https://bail-reckoner-url.com"><img class="logo" 
         src="https://res.cloudinary.com/dcnhb3jwv/image/upload/v1725218729/m1tobcwfsdy5mnnszhmm.png" alt="Bail Reckoner Logo"></a>
     <div class="message">Bail Application Status Update</div>
     <div class="body">

@@ -1,4 +1,4 @@
-from flask import Flask, Blueprint, request, jsonify
+from flask import Flask, Blueprint, request, jsonify, make_response
 import os
 import io
 import json
@@ -31,7 +31,6 @@ from config import ai
 from config.database import mongo
 from pymongo import MongoClient
 
-from flask_cors import CORS
 
 client = MongoClient(os.getenv("MONGODB_URL"))
 db = client["test"]
@@ -50,26 +49,6 @@ from PyPDF2 import PdfReader
 
 bailout_bp = Blueprint('bailout', __name__)
 
-
-CORS(bailout_bp)
-
-
-def pdf_to_text(pdf):
-    print("PDF YAHA HAI:",pdf)
-    print("MAI AAYI HU")
-    # creating a pdf reader object
-    
-    reader = PdfReader(pdf)
-    print("MAI NIKAL LI HU")
-    # printing number of pages in pdf file
-    print(len(reader.pages))
-
-    # getting a specific page from the pdf file
-    page = reader.pages[0]
-    print("WANNA BE MY CHAMMAK CHALLO")
-    # extracting text from page
-    text = page.extract_text()
-    return str(text)
 
 
 #paths
@@ -96,17 +75,16 @@ def get_appwrite_client():
     return client
 
 
-def send_mail(recipient, subject, body):
+def send_mail(recipient, subject, html):
     try:
         msg = Message(
             subject=subject,
             recipients=[recipient],
-            body=body,
+            html=html,
             sender=current_app.config['MAIL_DEFAULT_SENDER']
         )
-        print("------insde send mail-----------")
         mail = current_app.extensions['mail']
-        print("------insde send mail 2-----------", mail)
+        print("MAIL_LOCAL_HOSTNAME:", current_app.config['MAIL_LOCAL_HOSTNAME'])
         mail.send(msg)
         return "Email sent successfully"
     except Exception as e:
@@ -117,14 +95,13 @@ def send_mail(recipient, subject, body):
 
 def send_status_email(email, status, application_no, judge_license):
     try:
-        print("------inside email 1------------")
         mail_response = send_mail(
             email, 
             "Status Update", 
             generate_status_update(status, application_no, judge_license)
+            # content_type="text/html"
         )
-        print("------inside email 2------------")
-        print("Email sent successfully:", mail_response)
+        print("Email sent successfully:")
     except Exception as error:
         print("Error occurred while sending mails:", error)
         raise error
@@ -177,14 +154,6 @@ def run_llm():
    output=Previous_Cases_With_Summary_Fetch(bail_application_2,path_case_vector_store)
    print("OUTPUT:",output)
    return jsonify(output=output)
-
-
-@bailout_bp.route("/pdf-extract",methods=['POST'])
-def pdf_extracter():
-    pdfFile=request.json.get('pdf')
-    print("KASLJDKLASJLD:KJAS:KLDJKLASJKLDJKLAJSDKLJAS:KLDJ:KLASJD:KLJASKL")
-    textData=pdf_to_text(pdfFile)
-    return str(textData)
 
 
 
@@ -381,10 +350,19 @@ def get_judge_bail():
             'message': "couldn't get judge bail applications"
         }), 500
 
-@bailout_bp.route('/api/change-status', methods=['POST'])
+@bailout_bp.route('/api/change-status', methods=['POST','OPTIONS'])
 def change_status():
+    if request.method == 'OPTIONS':
+        response = make_response()
+        response.headers.add('Access-Control-Allow-Origin', 'http://localhost:3000')
+        response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
+        response.headers.add('Access-Control-Allow-Methods', 'POST,OPTIONS')
+        response.headers.add('Access-Control-Allow-Credentials', 'true')
+        return response
+
     try:
         print("--------------------------------")
+        print("REQUEST", request.data)
         data = request.json
         print("REQUEST BODY:", data)
         application_no = data.get('applicationNo')

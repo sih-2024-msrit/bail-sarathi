@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import os
 import sys
+import socket
 from controllers.auth import auth_bp
 from controllers.bailout import bailout_bp
 from config.database import mongo, init_db
@@ -14,7 +15,7 @@ from scripts.chatbot.chatbot import *
 
 from config import ai
 from flask_cors import CORS, cross_origin
-
+from flask_mail import Mail, Message
 
 
 from flask_mail import Mail
@@ -45,11 +46,10 @@ from flask_mail import Mail
 
 app = Flask(__name__)
 app.debug = True
+mail = Mail(app)
 
 
-app.register_blueprint(auth_bp)
-app.register_blueprint(bailout_bp)
-
+print(app)
 
 CORS(app, resources={r"/*": {
     "origins": ["http://localhost:3000", "http://127.0.0.1:3000"],
@@ -58,21 +58,25 @@ CORS(app, resources={r"/*": {
     "supports_credentials": True 
 }})
 
+app.register_blueprint(auth_bp)
+app.register_blueprint(bailout_bp)
+
 app.config["MONGO_URI"] = os.getenv("MONGODB_URL")
 
 app.config.update(
     MAIL_SERVER=os.getenv('MAIL_HOST'),
-    MAIL_PORT=os.getenv('MAIL_PORT'),
+    MAIL_PORT=int(os.getenv('MAIL_PORT')), 
     MAIL_USE_TLS=True,
     MAIL_USERNAME=os.getenv('MAIL_USER'),
-    MAIL_PASSWORD=os.getenv('MAIL_PASSWORD'),
-    MAIL_DEFAULT_SENDER=('Bail Sarathi', os.getenv('MAIL_USER'))
+    MAIL_PASSWORD=os.getenv('MAIL_PASS'),
+    MAIL_DEFAULT_SENDER=('confetti', os.getenv('MAIL_USER')),
+    MAIL_LOCAL_HOSTNAME='localhost.localdomain'
 )
 
+mail=Mail(app)
 
 # Initialize PyMongo
 init_db(app)
-mail = Mail(app)
 
 
 UPLOAD_FOLDER = 'temp_uploads'
