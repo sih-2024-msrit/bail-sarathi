@@ -1,23 +1,17 @@
-const BASE_URL = "http://localhost:4000/api/v1"
+const BASE_URL = "http://localhost:5000/api"
 
 
 export const authEndpoints = {
-    LOGIN_API: "http://localhost:5000/api/login",
-    SIGNUP_API:BASE_URL + "/auth/signup"
+    LOGIN_API: BASE_URL + "/login",
+    SIGNUP_API:BASE_URL + "/signup"
 }
 
-export const summaryEndpoints = {
-    GET_SUMMARY: BASE_URL + "/summary/summary",
-}
 
 export const bailoutEndpoints = {
-    SEND_BAILOUT: BASE_URL + "/bailout/bailout",
-    GET_BAILOUT_STATUS: BASE_URL + "/bailout/bailout-status",
-    BAIL_APPLY_API:"http://localhost:5000/api/create-application",
-    TEST_FLASK_API:BASE_URL + "/bailout/test-flask",
-    BAIL_SUMMARY_API:BASE_URL + "/bailout/bail-summary",
-    LAWYER_BAIL_API:BASE_URL + "/bailout/get-lawyer-bails",
-    JUDGE_BAIL_API:BASE_URL + "/bailout/get-judge-bails",
-    TEST_CHATBOT_API:BASE_URL + "/bailout/test-chatbot",
-    STATUS_CHANGE:"http://localhost:5000/api/change-status"
+    BAIL_APPLY_API:BASE_URL + "/create-application",
+    LAWYER_BAIL_API:BASE_URL + "/get-lawyer-bails",
+    STATUS_CHANGE:BASE_URL + "/change-status",
+    TEST_CHATBOT_API:BASE_URL + "/test-chatbot",
+    BAIL_SUMMARY_API:BASE_URL + "/bail-summary",
+    JUDGE_BAIL_API:BASE_URL + "/get-judge-bails"
 }
