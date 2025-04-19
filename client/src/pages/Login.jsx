@@ -38,6 +38,7 @@ const Login = () => {
       }
       console.log("RESPONSE DATA",response?.data)
       dispatch(setToken(response?.data?.token))
+      localStorage.setItem("token", JSON.stringify(response?.data?.token))
       dispatch(setUser(response?.data?.user))
       toast.success("You are logged in ")
       if(response?.data?.user?.accountType==="Judge"){

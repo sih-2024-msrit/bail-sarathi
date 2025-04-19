@@ -9,7 +9,7 @@ load_dotenv(find_dotenv())
 API_KEY =  os.getenv('GOOGLE_API_KEY')
 genai.configure(api_key = API_KEY)
 
-model = genai.GenerativeModel('gemini-pro')
+model = genai.GenerativeModel('gemini-1.5-flash')
 chat = model.start_chat(history = [])
 
 
@@ -19,7 +19,10 @@ def load_knowledge_base(file_path: str) -> str:
 
 def get_response(question):
 
-    knowledge_base = load_knowledge_base('C:/full_St/bail-reckoner/server/scripts/chatbot/knowledge_base.txt')
+    # Construct the path relative to the current script file
+    script_dir = os.path.dirname(__file__)
+    knowledge_base_path = os.path.join(script_dir, 'knowledge_base.txt')
+    knowledge_base = load_knowledge_base(knowledge_base_path)
 
     exit_commands = {"bye", "exit", "quit"}
 

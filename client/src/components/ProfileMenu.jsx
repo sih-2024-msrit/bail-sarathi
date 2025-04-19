@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setUser } from '../slices/userSlice';
 import { setToken } from '../slices/authSlice';
+import toast from 'react-hot-toast';
 
 const ProfileMenu = () => {
     const { user } = useSelector((state) => state.user);
@@ -12,6 +13,8 @@ const ProfileMenu = () => {
     const logout = () => {
         dispatch(setUser(null));
         dispatch(setToken(null));
+        localStorage.removeItem("token");
+        toast.success("Logged Out Successfully");
         navigate('/');
     }
 

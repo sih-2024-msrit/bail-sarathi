@@ -55,15 +55,16 @@ const Admin = () => {
   useEffect(() => {
     
     const timeoutId = setTimeout(() => {
+      // Safely convert applicationNo to string before filtering
       const filteredResults = data.filter(item =>
-        item.applicationNo.toLowerCase().includes(searchQuery.toLowerCase())
+        String(item.applicationNo || '').toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredData(filteredResults);
       setItemOffset(0); 
     }, 300); 
 
     return () => clearTimeout(timeoutId);
-  }, [searchQuery]); 
+  }, [searchQuery, data]); // Added data dependency
 
   // Determine the current items to display
   const endOffset = itemOffset + itemsPerPage;
@@ -136,8 +137,13 @@ const Admin = () => {
             {filterAppData.length > 0 ? (
               filterAppData.map((item, index) => (
                 <tr key={index} className='text-center border-b-2 border-gray-400'>
-                  <td className='py-2 hover:cursor-pointer' onClick={() => (navigate(item.applicationNo))}>{item.applicationNo}</td>
-                  <td className='py-2'>{item.createdAt.substr(0,10) + " " +  item.createdAt.substr(11,5)}</td>
+                  <td className='py-2 hover:cursor-pointer' onClick={() => (navigate(`/admin/${item.applicationNo}`))}>{item.applicationNo}</td>
+                  <td className='py-2'>
+                    {item.createdAt && item.createdAt.$date 
+                      ? new Date(item.createdAt.$date).toLocaleDateString('en-GB') + ' ' + new Date(item.createdAt.$date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
+                      : 'N/A'
+                    }
+                  </td>
                   <td className='py-2'>{item.jurisdiction.charAt(0).toUpperCase() + item.jurisdiction.slice(1)}</td>
                   <td className='py-2 text-blue-600 hover:cursor-pointer underline'><a target="_blank" rel="noreferrer"  href={item.application}>View</a></td>
                   <td className={`py-2 ${item.status === 'accepted' ? "text-green-500" :item.status === 'rejected'? "text-red-500" : "text-blue-500" }`}>

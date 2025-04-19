@@ -8,7 +8,7 @@ import Login from "./pages/Login"
 import BailApply from "./pages/BailApply";
 import BailSumary from "./pages/BailSumary";
 import ChatbotModal from "./components/ChatbotModal";
-
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -16,13 +16,41 @@ function App() {
       <ChatbotModal/>
   
       <Routes>
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/:applicationNo" element={<BailSumary />} />
         <Route path="/signup" element={<Signup/>}/>
         <Route path="/" element={<Login/>}/>
+        <Route 
+          path="/admin" 
+          element={
+            <ProtectedRoute>
+              <AdminDashboard />
+            </ProtectedRoute>
+          } 
+        />
+        <Route 
+          path="/admin/:applicationNo" 
+          element={
+            <ProtectedRoute>
+              <BailSumary />
+            </ProtectedRoute>
+          } 
+        />
         {/* <Route path="/application" element={ApplicationStatus}/> */}
-        <Route path="/apply-bail" element={<BailApply/>}/>
-        <Route path="/bail-summary" element={<BailSumary/>}/>
+        <Route 
+          path="/apply-bail" 
+          element={
+            <ProtectedRoute>
+              <BailApply />
+            </ProtectedRoute>
+          }
+        />
+        <Route 
+          path="/bail-summary" 
+          element={
+            <ProtectedRoute>
+              <BailSumary />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     
     </div>

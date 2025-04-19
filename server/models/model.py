@@ -35,7 +35,7 @@ class Bailout:
 
     @staticmethod
     def find_by_application_no(application_no):
-        return bailout.find_one({"application_no": application_no})
+        return bailout.find_one({"applicationNo": application_no})
     
     @staticmethod
     def find_by_license_no(license_no):
@@ -43,9 +43,6 @@ class Bailout:
 
     def find_by_judge_license_no(license_no):
         return bailout.find({"judgeLicense": license_no})
-
-    def find_by_application_no(applicationNo):
-        return bailout.find({"applicationNo": applicationNo})
 
     def __repr__(self):
         return f"<Bailout {self.application_no} - {self.status}>"

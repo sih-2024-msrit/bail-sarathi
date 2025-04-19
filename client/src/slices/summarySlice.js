@@ -2,8 +2,9 @@ import {createSlice} from "@reduxjs/toolkit"
 // import { bailout } from "../services/operations/BailAPI"
 
 const initialState={
-    summary:localStorage.getItem("summary") ? localStorage.getItem("summary"):null,
-    loading:false,
+    details: null,
+    loading: false,
+    error: null,
     bailout: localStorage.getItem("bailout") ? localStorage.getItem("bailout"):null
 }
 
@@ -12,11 +13,23 @@ const summarySlice = createSlice({
     name:"summary",
     initialState:initialState,
     reducers:{
-        setSummary(state,value){
-            state.summary=value.payload
+        fetchSummaryStart(state) {
+            state.loading = true;
+            state.error = null;
+            state.details = null; // Clear previous details on new fetch
         },
-        setLoading(state,value){
-            state.loading=value.payload
+        fetchSummarySuccess(state, action) {
+            state.loading = false;
+            state.details = action.payload; // Payload should be the bailDetails object
+        },
+        fetchSummaryFailure(state, action) {
+            state.loading = false;
+            state.error = action.payload; // Payload should be the error message
+        },
+        clearSummaryDetails(state) {
+            state.details = null;
+            state.loading = false;
+            state.error = null;
         },
         setBailout(state,value){
             state.bailout=value.payload
@@ -24,6 +37,12 @@ const summarySlice = createSlice({
     }
 })
 
-export const {setSummary, setLoading, setBailout}=summarySlice.actions
+export const {
+    fetchSummaryStart,
+    fetchSummarySuccess,
+    fetchSummaryFailure,
+    clearSummaryDetails,
+    setBailout
+} = summarySlice.actions
 
 export default summarySlice.reducer;
