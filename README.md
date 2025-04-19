@@ -232,16 +232,11 @@ MAIL_PASS=your_gmail_app_password_or_regular_password
 
 ## Screenshots
 
-*(Add screenshots of the application here later - e.g., Login Page, Admin Dashboard, Apply Bail Form, Summary View)*
-
 -   Login Page: `[image description]`
 -   Admin Dashboard: `[image description]`
 -   Apply Bail Form: `[image description]`
 -   Bail Summary View: `[image description]`
 
-## Contributing
-
-Contributions are welcome! Please follow standard fork, branch, and pull request procedures. Ensure code is formatted and passes any linting checks.
 
 ## License
 
