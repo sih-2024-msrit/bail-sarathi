@@ -21,7 +21,6 @@ Bail Sarathi is a full-stack web application designed to streamline the bail app
 - [Running the Application](#running-the-application)
 - [API Endpoints](#api-endpoints)
 - [Screenshots](#screenshots)
-- [Contributing](#contributing)
 - [License](#license)
 
 ## Overview
