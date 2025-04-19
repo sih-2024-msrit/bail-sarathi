@@ -84,7 +84,7 @@ The platform aims to assist legal professionals (lawyers and judges) by:
 ### AI/ML
 
 -   **Language Models:** Google Gemini (via `google-generativeai` SDK)
--   **Vector Embeddings/Search:** Langchain, ChromaDB (implied by vector store paths)
+-   **Vector Embeddings/Search:** Langchain, ChromaDB 
 
 ### Deployment/Storage
 
