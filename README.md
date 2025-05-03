@@ -244,6 +244,4 @@ MAIL_PASS=your_gmail_app_password_or_regular_password
 
 ## License
 
-*(Specify your license here, e.g., MIT, Apache 2.0, or leave as proprietary if applicable)*
-
-This project is licensed under the [Your License Name] License - see the LICENSE.md file for details (if applicable).
+This project is licensed under the GNU General Public License v2.0 - see the LICENSE.md file for details (if applicable).
