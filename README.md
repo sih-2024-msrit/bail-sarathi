@@ -231,10 +231,15 @@ MAIL_PASS=your_gmail_app_password_or_regular_password
 
 ## Screenshots
 
--   Login Page: `[image description]`
--   Admin Dashboard: `[image description]`
--   Apply Bail Form: `[image description]`
--   Bail Summary View: `[image description]`
+-   Login Page: 
+![Login Page](images/homepage.png)
+-   Apply Bail Form
+![Apply Bail Form](images/application_register.png)
+-   Judge Dashboard:
+![Judge Dashbaord](images/application_view.png)
+-   Bail Summary View: 
+![Bail Summary](images/summary.png)
+![Bail summary 2](images/summary2.png)
 
 
 ## License
